@@ -20,23 +20,26 @@
 		public var engine:Engine;
 
 		/// The SWC object containing graphics assets for the game
-		public var game:*; //SWC_Game;
+		public var game:SWC_ContainerGame;
 
 		/**
 		 * A MovieClip containing all of a FCT level
-		 * @param	eng			A reference to the Engine
+		 * @param	eng		A reference to the Engine
 		 */
 		public function ContainerGame(eng:Engine) {
 			super();
 			engine = eng;
 			
-			game = null; // new SWC_Game();
+			game = new SWC_ContainerGame();
 			addChild(game);
 			game.addEventListener(Event.ADDED_TO_STAGE, init);
 		}
 		
 		protected function init(e:Event):void {
 			game.removeEventListener(Event.ADDED_TO_STAGE, init);
+			
+			var fur:MovieClip = new SWC_Fur();
+			game.addChild(fur);
 		}
 		
 		/**

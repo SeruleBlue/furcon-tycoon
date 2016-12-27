@@ -16,7 +16,6 @@ package cobaltricindustries.fct {
 		private function init(e:Event = null):void {
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			stage.addChild(new Engine());
-			trace('[Main] Ready!');
 		}
 	}
 }

@@ -17,6 +17,8 @@
   <classpaths>
     <class path="." />
     <class path="..\bin" />
+    <class path="cobaltricindustries" />
+    <class path="cobaltricindustries" />
   </classpaths>
   <!-- Build options -->
   <build>
@@ -53,7 +55,9 @@
   </includeLibraries>
   <!-- SWC Libraries -->
   <libraryPaths>
-    <!-- example: <element path="..." /> -->
+    <element path="fla\swc\SWC_ContainerGame.swc" />
+    <element path="fla\swc\SWC_Fur.swc" />
+    <element path="fla\swc\SWC_Mask.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>

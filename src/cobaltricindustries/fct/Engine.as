@@ -14,11 +14,11 @@ package cobaltricindustries.fct {
 		private const RET_NORMAL:int = 10;
 		private const RET_RESTART:int = 11;
 		
-		private var gameState:int = STATE_MENU;
+		private var gameState:int = STATE_GAME;
 		private var returnCode:int = RET_NORMAL;
 		private var container:MovieClip;
 		
-		public var superContainer:*; //SWC_Mask;
+		public var superContainer:SWC_Mask;
 		
 		public function Engine() {			
 			addEventListener(Event.ENTER_FRAME, step);					// primary game loop firer
@@ -31,12 +31,15 @@ package cobaltricindustries.fct {
 		 */
 		private function onAddedToStage(e:Event):void {
 			removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-			superContainer = new MovieClip();
+			superContainer = new SWC_Mask();
 			superContainer.x += System.GAME_OFFSX;
-			superContainer.y += System.GAME_OFFSY;		
+			superContainer.y += System.GAME_OFFSY;
+			stage.addChild(superContainer);
+
+			switchToContainer(new ContainerGame(this), 0, 0);
+			gameState = STATE_GAME;
 		}
-		
-		
+
 		/**
 		 * Primary game loop event firer. Steps the current container, and advances
 		 * 	to the next one if the current container is complete
@@ -70,14 +73,14 @@ package cobaltricindustries.fct {
 		 * @param	offY				Offset y to translate the new container by
 		 */
 		private function switchToContainer(containerNew:ABST_Container, offX:Number = 0, offY:Number = 0):void {
-			if (container != null && superContainer.mc_container.contains(container)) {
-				superContainer.mc_container.removeChild(container);
+			if (container != null && superContainer.mc_base.contains(container)) {
+				superContainer.mc_base.removeChild(container);
 				container = null;
 			}
 			container = containerNew;
 			container.x += offX;
 			container.y += offY;
-			superContainer.mc_container.addChild(container);
+			superContainer.mc_base.addChild(container);
 			container.tabChildren = false;
 			container.tabEnabled = false;
 			

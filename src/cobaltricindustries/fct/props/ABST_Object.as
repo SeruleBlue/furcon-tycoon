@@ -18,8 +18,8 @@ package cobaltricindustries.fct.props {
 		/// Indicates if this object should be removed
 		protected var completed:Boolean = false;
 		
-		protected var hpMax:Number = 1;
-		protected var hp:Number = hpMax;
+		/// Dictionary of numeric stats for this object. string -> [current, min, max]
+		protected var stats:Object = {};
 
 		/**
 		 * Should only be called through super(), never instantiated
@@ -77,28 +77,18 @@ package cobaltricindustries.fct.props {
 		}
 		
 		/**
-		 * Change this object's HP.
-		 * @param	amt		A Number to change HP by; can be positive or negative
-		 * @return			true if HP is 0
+		 * Change one of this object's stats.
+		 * @param	key		string corresponding to the stat's key
+		 * @param	amt		A Number to change the stat by; can be positive or negative
+		 * @return			the new value of the stat
 		 */
-		public function changeHP(amt:Number):Boolean {
-			hp = System.changeWithLimit(hp, amt, 0, hpMax);
-			if (hp == 0) {
-				destroy();
+		public function changeStat(key:String, amt:Number):Number {
+			if (!stats[key]) {
+				trace('[' + this + '] Key does not exist! ' + key);
+				return 0;
 			}
-			return hp == 0;
-		}
-		
-		public function getHP():Number {
-			return hp;
-		}
-		
-		public function getHPmax():Number {
-			return hpMax;
-		}
-		
-		public function setHPmax(h:Number):void {
-			hp = hpMax = h;
+			stats[key][0] = System.changeWithLimit(stats[key][0], amt, stats[key][1], stats[key][2]);
+			return stats[key][0];
 		}
 		
 		/**
