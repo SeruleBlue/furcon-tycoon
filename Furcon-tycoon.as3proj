@@ -58,6 +58,9 @@
     <element path="fla\swc\SWC_ContainerGame.swc" />
     <element path="fla\swc\SWC_Fur.swc" />
     <element path="fla\swc\SWC_Mask.swc" />
+    <element path="src\fla\swc\SWC_ContainerGame.swc" />
+    <element path="src\fla\swc\SWC_Fur.swc" />
+    <element path="src\fla\swc\SWC_Mask.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>
@@ -77,7 +80,7 @@
   </library>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
-    <compile path="cobaltricindustries\fct\Main.as" />
+    <compile path="src\cobaltricindustries\fct\Main.as" />
   </compileTargets>
   <!-- Paths to exclude from the Project Explorer tree -->
   <hiddenPaths>

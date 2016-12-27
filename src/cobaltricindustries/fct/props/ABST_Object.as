@@ -1,6 +1,6 @@
-package cobaltricindustries.fct.props {
-	import cobaltricindustries.fct.ContainerGame;
-	import cobaltricindustries.fct.System;
+package src.cobaltricindustries.fct.props {
+	import src.cobaltricindustries.fct.ContainerGame;
+	import src.cobaltricindustries.fct.System;
 	import flash.display.MovieClip;
 	import flash.geom.Point;
 

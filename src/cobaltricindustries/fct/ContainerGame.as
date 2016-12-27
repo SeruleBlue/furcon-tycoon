@@ -1,4 +1,6 @@
-﻿package cobaltricindustries.fct {
+﻿package src.cobaltricindustries.fct {
+	import src.cobaltricindustries.fct.props.Fur;
+	import src.cobaltricindustries.fct.support.graph.GraphMaster;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.MovieClip;
@@ -21,6 +23,12 @@
 
 		/// The SWC object containing graphics assets for the game
 		public var game:SWC_ContainerGame;
+		
+		public var hitbox:MovieClip;
+		
+		public var graphMaster:GraphMaster;
+	
+		public var furs:Array;
 
 		/**
 		 * A MovieClip containing all of a FCT level
@@ -38,8 +46,22 @@
 		protected function init(e:Event):void {
 			game.removeEventListener(Event.ADDED_TO_STAGE, init);
 			
-			var fur:MovieClip = new SWC_Fur();
-			game.addChild(fur);
+			hitbox = game.mc_innerContainer.mc_collisionBox;
+			
+			
+			// Temporary dev code!
+			furs = [];
+			var fur:Fur;
+			for (var i:int = 0; i < 5; i++) {
+				fur = new Fur(this, new SWC_Fur());
+				game.addChild(fur.mc_object);
+				furs.push(fur);
+			}
+			
+			
+			graphMaster = new GraphMaster(this);
+			graphMaster.initNodes("simple");
+			graphMaster.initGraph();
 		}
 		
 		/**
@@ -51,6 +73,11 @@
 				return completed;
 			}
 			// Otherwise, do stuff first.
+			
+			for each (var fur:Fur in furs) {
+				fur.step();
+			}
+			
 			return completed;
 		}
 

@@ -1,4 +1,4 @@
-package cobaltricindustries.fct.managers {
+package src.cobaltricindustries.fct.managers {
 	import cobaltricindustries.fct.ContainerGame;
 	import cobaltricindustries.fct.props.ABST_Object;
 	import cobaltricindustries.fct.System;

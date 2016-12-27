@@ -1,5 +1,5 @@
-package cobaltricindustries.fct.support {
-	import cobaltricindustries.fct.ContainerGame;
+package src.cobaltricindustries.fct.support {
+	import src.cobaltricindustries.fct.ContainerGame;
 
 	/**
 	 * Abstract support class

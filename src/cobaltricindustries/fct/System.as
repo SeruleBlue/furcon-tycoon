@@ -1,4 +1,4 @@
-package cobaltricindustries.fct {
+package src.cobaltricindustries.fct {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.BitmapDataChannel;
@@ -10,6 +10,7 @@ package cobaltricindustries.fct {
 	import flash.geom.ColorTransform;
 	import flash.geom.Point;
 	import flash.ui.Keyboard;
+	import src.cobaltricindustries.fct.props.ABST_Movable;
 	
 	/**
 	 * Helper functionality
@@ -249,29 +250,27 @@ package cobaltricindustries.fct {
 
 		/**
 		 * Determine if a line can be drawn between origin and target without colliding with the ship
-		 * @param	anchor		Any instance of an ABST_IMovable; helps with collision detection
+		 * @param	anchor		Any instance of an ABST_Movable; helps with collision detection
 		 * @param	origin		Origin of LOS check
 		 * @param	target		Target that origin is looking at
 		 * @param	offset		Amount to adjust origin
 		 * @return				true if origin has LOS on target
 		 */
-		/*public static function hasLineOfSight(origin:ABST_IMovable, target:Point, offset:Point = null ):Boolean {
+		public static function hasLineOfSight(origin:ABST_Movable, target:Point, offset:Point = null ):Boolean {
 			if (offset == null) offset = new Point();
 			var angle:Number = getAngle(origin.mc_object.x, origin.mc_object.y, target.x, target.y);
 			var distMax:int = int(getDistance(origin.mc_object.x, origin.mc_object.y, target.x, target.y));
 			var dist:int = 1;
 			const DIST_STEP:int = 2;
-			while (dist < distMax)
-			{
+			while (dist < distMax) {
 				var ptL:Point = MovieClip(origin.mc_object.parent).localToGlobal(new Point(origin.mc_object.x + offset.x + forward(dist, angle, true), origin.mc_object.y + offset.y + forward(dist, angle, false)));
-				if (origin.hitMask.hitTestPoint(ptL.x, ptL.y, true))
-				{
+				if (origin.hitMask.hitTestPoint(ptL.x, ptL.y, true)) {
 					return false;
 				}
 				dist += DIST_STEP;
 			}
 			return true;
-		}*/
+		}
 		
 		public static function calculateAverage(values:Array):Number {
 			if (!values || values.length == 0)

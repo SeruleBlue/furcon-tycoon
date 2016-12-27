@@ -1,4 +1,4 @@
-﻿package cobaltricindustries.fct {
+﻿package src.cobaltricindustries.fct {
 	import flash.display.MovieClip;
 	import flash.display.SimpleButton;
 	import flash.events.Event;

@@ -1,4 +1,4 @@
-package cobaltricindustries.fct {
+package src.cobaltricindustries.fct {
 	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.geom.Point;

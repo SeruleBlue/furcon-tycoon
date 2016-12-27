@@ -1,13 +1,15 @@
-package fct.props {
-	import cobaltricindustries.fct.ContainerGame;
-	import cobaltricindustries.fct.props.ABST_Object;
+package src.cobaltricindustries.fct.props {
+	import src.cobaltricindustries.fct.ContainerGame;
+	import src.cobaltricindustries.fct.props.ABST_Movable;
+	import src.cobaltricindustries.fct.System;
 	import flash.display.MovieClip;
+	import flash.geom.Point;
 	
 	/**
 	 * Object representing an individual, con-going furry.
 	 * @author Serule Blue
 	 */
-	public class Fur extends ABST_Object {
+	public class Fur extends ABST_Movable {
 		
 		public var handle:String = "Anonymous Furry";
 		public var age:int = 22;
@@ -15,7 +17,7 @@ package fct.props {
 		public var inventory:Array = [];
 		
 		public function Fur(_cg:ContainerGame, _mc_object:MovieClip = null) {
-			super(_cg, _mc_object);
+			super(_cg, _mc_object, _cg.hitbox);
 			
 			stats["happiness"] = [50, 0, 100];
 			stats["energy"] = [50, 0, 100];
