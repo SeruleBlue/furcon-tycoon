@@ -249,7 +249,7 @@ package src.cobaltricindustries.fct {
 		}*/
 
 		/**
-		 * Determine if a line can be drawn between origin and target without colliding with the ship
+		 * Determine if a line can be drawn between origin and target without colliding with the hitbox
 		 * @param	anchor		Any instance of an ABST_Movable; helps with collision detection
 		 * @param	origin		Origin of LOS check
 		 * @param	target		Target that origin is looking at
@@ -270,6 +270,17 @@ package src.cobaltricindustries.fct {
 				dist += DIST_STEP;
 			}
 			return true;
+		}
+		
+		/**
+		 * Check LOS normally and from 4 different points around the origin
+		 * @param	tgt		Target of LOS check
+		 * @return			true if buffered LOS between origin and tgt
+		 */
+		public static function extendedLOScheck(origin:ABST_Movable, tgt:Point, buffer:int = 2):Boolean {
+			return System.hasLineOfSight(origin, tgt) &&
+				   System.hasLineOfSight(origin, tgt, new Point(-buffer, 0)) && System.hasLineOfSight(origin, tgt, new Point(buffer, 0)) &&
+				   System.hasLineOfSight(origin, tgt, new Point(0, -buffer)) && System.hasLineOfSight(origin, tgt, new Point(0, buffer));
 		}
 		
 		public static function calculateAverage(values:Array):Number {

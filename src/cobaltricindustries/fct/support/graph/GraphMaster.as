@@ -40,6 +40,9 @@ package src.cobaltricindustries.fct.support.graph {
 			// Now add the edges manually.
 			switch (hotelName) {
 				case "simple":
+					// Define spawn nodes
+					nodeMap["gn_en_s"].isSpawn = true;
+					nodeMap["gn_en_e"].isSpawn = true;
 					
 					// Entry
 					nodeMap["gn_en_s"].connectNodes(["gn_ls_se"]);
@@ -126,14 +129,16 @@ package src.cobaltricindustries.fct.support.graph {
 			
 			// Floyd-Warshall
 			var newDist:Number;
-			for (k = 0; k < nodes.length; k++)
-				for (i = 0; i < nodes.length; i++)
+			for (k = 0; k < nodes.length; k++) {
+				for (i = 0; i < nodes.length; i++) {
 					for (j = 0; j < nodes.length; j++) {
 						if (dist[nodes[i].mc_object.name][nodes[k].mc_object.name] + dist[nodes[k].mc_object.name][nodes[j].mc_object.name] < dist[nodes[i].mc_object.name][nodes[j].mc_object.name]) {
 							dist[nodes[i].mc_object.name][nodes[j].mc_object.name] = dist[nodes[i].mc_object.name][nodes[k].mc_object.name] + dist[nodes[k].mc_object.name][nodes[j].mc_object.name];
 							nodeDirections[nodes[i].mc_object.name][nodes[j].mc_object.name] = nodeDirections[nodes[i].mc_object.name][nodes[k].mc_object.name];
 						}
 					}
+				}
+			}
 		}
 		
 		/**
@@ -171,6 +176,8 @@ package src.cobaltricindustries.fct.support.graph {
 			var nearest:GraphNode = null;
 			var newDist:Number;
 			for each (var node:GraphNode in nodes) {
+				// Ignore spawn-only nodes.
+				if (node.isSpawn) continue;
 				newDist = System.getDistance(target.x, target.y, node.mc_object.x, node.mc_object.y);
 				if (newDist > dist) continue;
 				if (ignoreWalls || System.hasLineOfSight(origin, new Point(node.mc_object.x, node.mc_object.y))) {

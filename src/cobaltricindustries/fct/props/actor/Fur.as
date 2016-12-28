@@ -1,4 +1,4 @@
-package src.cobaltricindustries.fct.props {
+package src.cobaltricindustries.fct.props.actor {
 	import src.cobaltricindustries.fct.ContainerGame;
 	import src.cobaltricindustries.fct.props.ABST_Movable;
 	import src.cobaltricindustries.fct.System;
@@ -19,14 +19,19 @@ package src.cobaltricindustries.fct.props {
 		public function Fur(_cg:ContainerGame, _mc_object:MovieClip = null) {
 			super(_cg, _mc_object, _cg.hitbox);
 			
-			stats["happiness"] = [50, 0, 100];
-			stats["energy"] = [50, 0, 100];
+			stats["happiness"] = 	[75, 0, 100,	-1, 0, System.SECOND * 2];
+			stats["energy"] = 		[50, 0, 100,	-1, 0, System.SECOND * 30];
 
-			stats["hunger"] = [0, 0, 100];
-			stats["thirst"] = [0, 0, 100];
-			stats["toilet"] = [0, 0, 100];
+			stats["hunger"] = 		[0, 0, 100,		 1, 0, System.SECOND * 30];
+			stats["thirst"] = 		[0, 0, 100,		 1, 0, System.SECOND * 30];
+			stats["toilet"] = 		[0, 0, 100,		 1, 0, System.SECOND * 30];
 
-			stats["money"] = [100, 0, 9999];
+			stats["money"] = 		[50, 0, 9999];
+		}
+		
+		override public function step():Boolean {
+			updateStats();
+			return super.step();
 		}
 	}
 }

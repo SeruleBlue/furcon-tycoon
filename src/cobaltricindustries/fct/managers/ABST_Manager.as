@@ -1,7 +1,7 @@
 package src.cobaltricindustries.fct.managers {
-	import cobaltricindustries.fct.ContainerGame;
-	import cobaltricindustries.fct.props.ABST_Object;
-	import cobaltricindustries.fct.System;
+	import src.cobaltricindustries.fct.ContainerGame;
+	import src.cobaltricindustries.fct.props.ABST_Object;
+	import src.cobaltricindustries.fct.System;
 
 	/**
 	 * Abstract Manager class, for managing mulitple instances of related objects.
@@ -19,7 +19,7 @@ package src.cobaltricindustries.fct.managers {
 		}
 		
 		/**
-		 * Called once per frame by ContainerGame
+		 * Called once per frame by MetaManager
 		 * Step all of the objects in objArray (and stop keeping track of those that are completed)
 		 */
 		public function step():void {
@@ -86,13 +86,11 @@ package src.cobaltricindustries.fct.managers {
 			if (!o.isActive())
 				return null;
 			var other:ABST_Object;
-			for (var i:int = 0; i < objArray.length; i++)
-			{
+			for (var i:int = 0; i < objArray.length; i++) {
 				other = objArray[i];
 				if (!other.isActive() || collisionException(o, other))
 					continue;
-				if (System.getDistance(o.mc_object.x, o.mc_object.y, other.mc_object.x, other.mc_object.y) < Math.max(o.mc_object.width, other.mc_object.width))
-				{
+				if (System.getDistance(o.mc_object.x, o.mc_object.y, other.mc_object.x, other.mc_object.y) < Math.max(o.mc_object.width, other.mc_object.width)) {
 					if (!precise || other.mc_object.hitTestPoint(o.mc_object.x + System.GAME_OFFSX, o.mc_object.y + System.GAME_OFFSY, true))
 						return other;
 				}
@@ -121,8 +119,7 @@ package src.cobaltricindustries.fct.managers {
 			if (!objArray) return false;
 			var other:ABST_Object;
 			var dist:Number;
-			for (var i:int = 0; i < objArray.length; i++)
-			{
+			for (var i:int = 0; i < objArray.length; i++) {
 				other = objArray[i];
 				if (!other.isActive())
 					continue;
@@ -170,9 +167,11 @@ package src.cobaltricindustries.fct.managers {
 		 * Silently kill all objects managed by this manager
 		 */
 		public function killAll():void {
-			if (objArray)
-				for (var i:int = objArray.length - 1; i >= 0; i--)
+			if (objArray) {
+				for (var i:int = objArray.length - 1; i >= 0; i--) {
 					objArray[i].destroySilently();
+				}
+			}
 			objArray = [];
 		}
 		

@@ -1,5 +1,7 @@
 ﻿package src.cobaltricindustries.fct {
-	import src.cobaltricindustries.fct.props.Fur;
+	import src.cobaltricindustries.fct.managers.ManagerFur;
+	import src.cobaltricindustries.fct.managers.MetaManager;
+	import src.cobaltricindustries.fct.props.actor.Fur;
 	import src.cobaltricindustries.fct.support.graph.GraphMaster;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -13,6 +15,7 @@
 	import flash.media.SoundMixer;
 	import flash.events.MouseEvent;
 	import flash.utils.getTimer;
+	import src.cobaltricindustries.fct.support.UI;
 	
 	/**
 	 * Primary game container and controller.
@@ -28,7 +31,8 @@
 		
 		public var graphMaster:GraphMaster;
 	
-		public var furs:Array;
+		public var metaManager:MetaManager;
+		public var ui:UI;
 
 		/**
 		 * A MovieClip containing all of a FCT level
@@ -48,16 +52,10 @@
 			
 			hitbox = game.mc_innerContainer.mc_collisionBox;
 			
+			metaManager = new MetaManager(this);
+			metaManager.addManager(new ManagerFur(this), "fur");
 			
-			// Temporary dev code!
-			furs = [];
-			var fur:Fur;
-			for (var i:int = 0; i < 5; i++) {
-				fur = new Fur(this, new SWC_Fur());
-				game.addChild(fur.mc_object);
-				furs.push(fur);
-			}
-			
+			ui = new UI(this);
 			
 			graphMaster = new GraphMaster(this);
 			graphMaster.initNodes("simple");
@@ -74,9 +72,7 @@
 			}
 			// Otherwise, do stuff first.
 			
-			for each (var fur:Fur in furs) {
-				fur.step();
-			}
+			metaManager.step();
 			
 			return completed;
 		}

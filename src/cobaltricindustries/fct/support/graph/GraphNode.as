@@ -15,6 +15,9 @@ package src.cobaltricindustries.fct.support.graph {
 		public var edges:Array = [];
 		public var edgeCost:Object = { };
 		
+		/// Whether this node is a spawn node only (and should not be chosen as a future destination)
+		public var isSpawn:Boolean = false;
+		
 		public function GraphNode(_cg:ContainerGame, _gm:GraphMaster, _mc_object:MovieClip) {
 			cg = _cg;
 			gm = _gm;

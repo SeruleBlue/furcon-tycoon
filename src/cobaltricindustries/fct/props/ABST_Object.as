@@ -18,8 +18,11 @@ package src.cobaltricindustries.fct.props {
 		/// Indicates if this object should be removed
 		protected var completed:Boolean = false;
 		
-		/// Dictionary of numeric stats for this object. string -> [current, min, max]
-		protected var stats:Object = {};
+		/// Dictionary of numeric stats for this object. string -> [current, min, max, update_amount, update_counter, update_frequency]
+		protected var stats:Object = { };
+		
+		/// Helper for use in ABST_Manager.getNearby
+		public var nearDistance:Number = 0;
 
 		/**
 		 * Should only be called through super(), never instantiated
@@ -89,6 +92,33 @@ package src.cobaltricindustries.fct.props {
 			}
 			stats[key][0] = System.changeWithLimit(stats[key][0], amt, stats[key][1], stats[key][2]);
 			return stats[key][0];
+		}
+		
+		/**
+		 * Get the current value of the given stat
+		 * @param	key		stat
+		 * @return
+		 */
+		public function getStat(key:String):Number {
+			return stats[key][0];
+		}
+		
+		/**
+		 * Update all of this object's stats based on its update values.
+		 */
+		protected function updateStats():void {
+			for (var key:String in stats) {
+				var stat:Array = stats[key];
+				// if update values exist
+				if (stat.length > 3) {
+					// if incrementing the counter hits the limit
+					if (++stat[4] >= stat[5]) {
+						// reset the counter and change the stat by the update value
+						stat[4] = 0;
+						changeStat(key, stat[3]);
+					}
+				}
+			}
 		}
 		
 		/**

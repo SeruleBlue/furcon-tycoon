@@ -1,5 +1,7 @@
 package src.cobaltricindustries.fct.props {
 	import flash.display.MovieClip;
+	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import src.cobaltricindustries.fct.ContainerGame;
 	import src.cobaltricindustries.fct.support.graph.GraphNode;
@@ -16,6 +18,10 @@ package src.cobaltricindustries.fct.props {
 		private var range:Number = 5;			// current range
 		private const RANGE:Number = 5;			// node clear range
 		private const MOVE_RANGE:Number = 2;	// diff on movement
+		private const BEELINE_RANGE:Number = 40;
+		
+		private const BEELINE_INTERVAL:int = 15;	// how often to check for beeline
+		private var beelineCounter:int = 0;
 		
 		private var enum:int = 0;
 		
@@ -33,12 +39,29 @@ package src.cobaltricindustries.fct.props {
 		private var nodeOfInterest:GraphNode;
 		/// Ordered list of GraphNodes to visit to get to the nodeOfInterest.
 		private var path:Array;
+		private var pathDebug:Array;
 
 		public function ABST_Movable(_cg:ContainerGame, _mc_object:MovieClip, _hitMask:MovieClip) {
 			super(_cg, _mc_object);
 			hitMask = _hitMask;
 			
 			state = STATE_IDLE;
+			
+			mc_object.addEventListener(Event.ADDED_TO_STAGE, init);
+		}
+		
+		private function init(e:Event):void {
+			mc_object.removeEventListener(Event.ADDED_TO_STAGE, init);
+			mc_object.addEventListener(MouseEvent.CLICK, onClick);
+		}
+		
+		private function onClick(e:MouseEvent):void {
+			trace(this + " destination is " + nodeOfInterest.mc_object.name);
+			var s:String;
+			for each (var n:GraphNode in pathDebug) {
+				s += n.mc_object.name + " ";
+			}
+			trace(this + " path is " + s);
 		}
 		
 		override public function step():Boolean {			
@@ -47,12 +70,24 @@ package src.cobaltricindustries.fct.props {
 					if (nodeOfInterest == null) {
 						nodeOfInterest = System.getRandFrom(cg.graphMaster.nodes);
 						setPOI(new Point(nodeOfInterest.mc_object.x, nodeOfInterest.mc_object.y));
-						trace('[ABST_Object] Moving to new nodeOfInterest: ' + nodeOfInterest.mc_object.name);
 					}
 				break;
 				case STATE_MOVE_NETWORK:
+					if (pointOfInterest != null) {
+						// Check if we can make a beeline to the target.
+						if (++beelineCounter >= BEELINE_INTERVAL) {
+							beelineCounter = 0;
+							if (System.getDistance(mc_object.x, mc_object.y, pointOfInterest.x, pointOfInterest.y) < BEELINE_RANGE &&
+								System.extendedLOScheck(this, pointOfInterest)) {
+								state = STATE_MOVE_FROM_NETWORK;
+								path = [];
+								pathDebug = [];
+								break;
+							}
+						}
+					}
+				
 					if (nodeOfInterest == null) {
-						trace("[" + this + "] Node of interest was null! Cancelling!");
 						state = STATE_MOVE_FROM_NETWORK;
 						return completed;
 					}
@@ -61,7 +96,6 @@ package src.cobaltricindustries.fct.props {
 					if (System.getDistance(mc_object.x, mc_object.y, nodeOfInterest.mc_object.x, nodeOfInterest.mc_object.y) < RANGE) {
 						nodeOfInterest = path.shift();
 						if (nodeOfInterest == null) {
-							trace("[" + this + "] Leaving path network.");
 							state = STATE_MOVE_FROM_NETWORK;
 							return completed;
 						}
@@ -71,7 +105,6 @@ package src.cobaltricindustries.fct.props {
 					moveToPoint(pointOfInterest);
 					// arrived at destination
 					if (System.getDistance(mc_object.x, mc_object.y, pointOfInterest.x, pointOfInterest.y) < range) {
-						trace("[" + this + "] Arrived!");
 						nodeOfInterest = null;
 						state = STATE_IDLE;
 					}
@@ -89,12 +122,12 @@ package src.cobaltricindustries.fct.props {
 		private function setPOI(p:Point):void {
 			pointOfInterest = p;
 			path = cg.graphMaster.getPath(this, pointOfInterest);
+			pathDebug = path.concat([]);
 			if (path.length != 0) {
 				nodeOfInterest = path[0];
 			}	
 			range = RANGE;
 			state = STATE_MOVE_NETWORK;
-			trace("[" + this + "] New path found of length: " + path.length);
 		}
 
 		override protected function updatePosition(dx:Number, dy:Number):void {
