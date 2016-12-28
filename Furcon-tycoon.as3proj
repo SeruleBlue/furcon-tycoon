@@ -4,7 +4,7 @@
   <output>
     <movie outputType="Application" />
     <movie input="" />
-    <movie path="..\bin\FurConTycoon.swf" />
+    <movie path="bin\FurConTycoon.swf" />
     <movie fps="30" />
     <movie width="960" />
     <movie height="600" />
