@@ -14,9 +14,10 @@ package src.cobaltricindustries.fct.props {
 	 */
 	public class ABST_Movable extends ABST_Object {
 		public static const NORMAL_SPEED:Number = 2;
-		public static const PRECISE_SPEED:Number = 0.75;
+		public static const PRECISE_MULT:Number = 0.4;
+		public var speed:Number = NORMAL_SPEED;
 		
-		public var range:Number = 5;					// current range
+		public var range:Number = 10;					// current range
 		public static const RANGE:Number = 5;			// node clear range
 		public static const MOVE_RANGE:Number = 2;		// diff on movement
 		public static const BEELINE_RANGE:Number = 300;	// max distance from target to consider making a beeline
@@ -66,17 +67,23 @@ package src.cobaltricindustries.fct.props {
 		}
 		
 		/**
-		 * Set the POI and calculate a new path
+		 * Set the POI and calculate a new path. Sets state to STATE_MOVE_NETWORK.
 		 * @param	p		new POI
+		 * @param	noPath	if true, don't calculate a path
 		 */
-		protected function setPOI(p:Point):void {
+		public function setPOI(p:Point, noPath:Boolean = false):void {
 			pointOfInterest = p;
-			path = cg.graphMaster.getPath(this, pointOfInterest);
-			if (path.length != 0) {
-				nodeOfInterest = path[0];
-			}	
+			path = [];
+			if (!noPath) {
+				path = cg.graphMaster.getPath(this, pointOfInterest);
+				if (path.length != 0) {
+					nodeOfInterest = path[0];
+				}
+				state = STATE_MOVE_NETWORK;
+			} else {
+				state = STATE_MOVE_FROM_NETWORK;
+			}
 			range = RANGE;
-			state = STATE_MOVE_NETWORK;
 		}
 
 		override protected function updatePosition(dx:Number, dy:Number):void {
@@ -112,7 +119,7 @@ package src.cobaltricindustries.fct.props {
 		 * @param	tgt
 		 */
 		public function moveToPoint(tgt:Point):void {			
-			var spd:int = System.getDistance(mc_object.x, mc_object.y, tgt.x, tgt.y) < RANGE ? PRECISE_SPEED : NORMAL_SPEED;
+			var spd:Number = speed * (System.getDistance(mc_object.x, mc_object.y, tgt.x, tgt.y) < RANGE ? PRECISE_MULT : 1);
 			var tgtAngle:Number = System.getAngle(mc_object.x, mc_object.y, tgt.x, tgt.y);
 			updatePosition(System.forward(spd, tgtAngle, true), System.forward(spd, tgtAngle, false));
 		}
@@ -132,7 +139,7 @@ package src.cobaltricindustries.fct.props {
 					debugMc.graphics.lineTo(nodeOfInterest.mc_object.x, nodeOfInterest.mc_object.y);
 				}
 				if (pointOfInterest != null) {
-					debugMc.graphics.lineStyle(2, 0x00FFFF, 0.25);
+					debugMc.graphics.lineStyle(2, speed == NORMAL_SPEED ? 0x00FFFF : 0xFF00FF, 0.25);
 					debugMc.graphics.moveTo(mc_object.x, mc_object.y);
 					debugMc.graphics.lineTo(pointOfInterest.x, pointOfInterest.y);
 				}

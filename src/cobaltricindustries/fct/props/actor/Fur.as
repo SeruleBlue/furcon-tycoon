@@ -2,7 +2,7 @@ package src.cobaltricindustries.fct.props.actor {
 	import flash.events.MouseEvent;
 	import src.cobaltricindustries.fct.ContainerGame;
 	import src.cobaltricindustries.fct.props.ABST_Movable;
-	import src.cobaltricindustries.fct.props.actor.logic.LogicMove;
+	import src.cobaltricindustries.fct.props.actor.logic.*;
 	import src.cobaltricindustries.fct.System;
 	import flash.display.MovieClip;
 	import flash.geom.Point;
@@ -18,7 +18,7 @@ package src.cobaltricindustries.fct.props.actor {
 		public var inventory:Array = [];
 		
 		/// Dictionary of string keys to Logics.
-		protected var brain:Object = { };
+		public var brain:Object = { };
 		
 		public function Fur(_cg:ContainerGame, _mc_object:MovieClip = null) {
 			super(_cg, _mc_object, _cg.hitbox);
@@ -32,6 +32,7 @@ package src.cobaltricindustries.fct.props.actor {
 
 			stats["money"] = 		[50, 0, 9999];
 			
+			brain["idle"] = new LogicIdle(this);
 			brain["move"] = new LogicMove(this);
 		}
 		
@@ -39,15 +40,14 @@ package src.cobaltricindustries.fct.props.actor {
 			updateStats();
 			
 			switch (state) {
-				case STATE_IDLE:
-					if (pointOfInterest == null) {
-						setPOI(System.getRandomValidLocation(this));
-					}
-					break;
 				case STATE_MOVE_FREE:
 				case STATE_MOVE_NETWORK:
 				case STATE_MOVE_FROM_NETWORK:
 					brain["move"].runLogic();
+					break;
+				case STATE_IDLE:
+				default:
+					brain["idle"].runLogic();
 					break;
 			}
 
@@ -57,7 +57,8 @@ package src.cobaltricindustries.fct.props.actor {
 		override protected function onClick(e:MouseEvent):void {
 			var out:String = handle + " (" + age + ")\n";
 			out += "HAP: " + stats["happiness"][0] + "\n";
-			out += "NoI: " + nodeOfInterest.mc_object.name + "\n";
+			out += "NoI: " + (nodeOfInterest ? nodeOfInterest.mc_object.name : "--") + "\n";
+			out += "state: " + state + "\n";
 			cg.ui.setDebug(out);
 		}
 	}

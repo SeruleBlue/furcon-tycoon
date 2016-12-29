@@ -58,6 +58,15 @@ package src.cobaltricindustries.fct {
 		}
 		
 		/**
+		 * Given a probability chance, randomly return true or false.
+		 * @param	chance	[0-100]
+		 * @return
+		 */
+		public static function rand(chance:Number):Boolean {
+			return getRandNum(0, 100) <= chance;
+		}
+
+		/**
 		 * Get a random element from the given array
 		 * @param	arr		The choices
 		 * @return			A random element from arr

@@ -11,7 +11,7 @@ package src.cobaltricindustries.fct.props.actor.logic {
 	public class LogicMove extends ABST_Logic {
 	
 		public static const BEELINE_INTERVAL:int = 15;	// how often to check for beeline
-		protected var beelineCounter:int = System.getRandInt(0, BEELINE_INTERVAL);
+		public var beelineCounter:int = System.getRandInt(0, BEELINE_INTERVAL);
 
 		public function LogicMove(fur_:Fur) {
 			super(fur_);
@@ -51,11 +51,7 @@ package src.cobaltricindustries.fct.props.actor.logic {
 					fur.moveToPoint(fur.pointOfInterest);
 					// arrived at destination
 					if (System.inRange(fur.mc_object.x, fur.mc_object.y, fur.pointOfInterest.x, fur.pointOfInterest.y, fur.range)) {
-						fur.nodeOfInterest = null;
-						fur.pointOfInterest = null;
-						fur.state = ABST_Movable.STATE_IDLE;
-						// Get ready to immediately check for beeline the next time we need to move.
-						beelineCounter = BEELINE_INTERVAL;
+						onArrive();
 					}
 					break;
 			}
@@ -78,6 +74,17 @@ package src.cobaltricindustries.fct.props.actor.logic {
 			if (fur.nodeOfInterest == null) {
 				fur.state = ABST_Movable.STATE_MOVE_FROM_NETWORK;
 			}
+		}
+		
+		/**
+		 * Do something now that we've arrived.
+		 */
+		protected function onArrive():void {
+			fur.nodeOfInterest = null;
+			fur.pointOfInterest = null;
+			fur.state = ABST_Movable.STATE_IDLE;
+			// Get ready to immediately check for beeline the next time we need to move.
+			beelineCounter = BEELINE_INTERVAL;
 		}
 	}
 }
