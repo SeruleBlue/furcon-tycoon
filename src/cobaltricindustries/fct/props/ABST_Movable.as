@@ -16,10 +16,10 @@ package src.cobaltricindustries.fct.props {
 		public static const NORMAL_SPEED:Number = 2;
 		public static const PRECISE_SPEED:Number = 0.75;
 		
-		public var range:Number = 5;				// current range
+		public var range:Number = 5;					// current range
 		public static const RANGE:Number = 5;			// node clear range
 		public static const MOVE_RANGE:Number = 2;		// diff on movement
-		public static const BEELINE_RANGE:Number = 40;
+		public static const BEELINE_RANGE:Number = 300;	// max distance from target to consider making a beeline
 		
 		private static var enum:int = 0;
 		
@@ -37,7 +37,6 @@ package src.cobaltricindustries.fct.props {
 		public var nodeOfInterest:GraphNode;
 		/// Ordered list of GraphNodes to visit to get to the nodeOfInterest.
 		public var path:Array;
-		public var pathDebug:Array;
 		
 		public var debuggingEnabled:Boolean = false;
 		public var debugMc:MovieClip;
@@ -73,7 +72,6 @@ package src.cobaltricindustries.fct.props {
 		protected function setPOI(p:Point):void {
 			pointOfInterest = p;
 			path = cg.graphMaster.getPath(this, pointOfInterest);
-			pathDebug = path.concat([]);
 			if (path.length != 0) {
 				nodeOfInterest = path[0];
 			}	

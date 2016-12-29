@@ -1,6 +1,8 @@
 package src.cobaltricindustries.fct.managers {
+	import flash.geom.Point;
 	import src.cobaltricindustries.fct.ContainerGame;
 	import src.cobaltricindustries.fct.props.actor.Fur;
+	import src.cobaltricindustries.fct.System;
 	/**
 	 * Updates all Furs and provides aggregated stats.
 	 * @author Serule Blue
@@ -12,11 +14,18 @@ package src.cobaltricindustries.fct.managers {
 			
 			// Temporary dev code!
 			var fur:Fur;
+			var first:Fur;
 			for (var i:int = 0; i < 15; i++) {
 				fur = new Fur(cg, new SWC_Fur());
 				cg.game.addChild(fur.mc_object);
+				if (!first) {
+					first = fur;
+				} else {
+					var pt:Point = System.getRandomValidLocation(first);
+					fur.mc_object.x = pt.x; fur.mc_object.y = pt.y;
+				}
 				addObject(fur);
-				fur.enableDebugging();
+				//fur.enableDebugging();
 			}
 		}
 		

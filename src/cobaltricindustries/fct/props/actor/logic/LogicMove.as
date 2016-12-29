@@ -11,7 +11,7 @@ package src.cobaltricindustries.fct.props.actor.logic {
 	public class LogicMove extends ABST_Logic {
 	
 		public static const BEELINE_INTERVAL:int = 15;	// how often to check for beeline
-		protected var beelineCounter:int = 0;
+		protected var beelineCounter:int = System.getRandInt(0, BEELINE_INTERVAL);
 
 		public function LogicMove(fur_:Fur) {
 			super(fur_);
@@ -21,14 +21,18 @@ package src.cobaltricindustries.fct.props.actor.logic {
 			switch (fur.state) {
 				case ABST_Movable.STATE_MOVE_NETWORK:
 					if (fur.pointOfInterest != null) {
-						// Check if we can make a beeline to the target.
 						if (++beelineCounter >= BEELINE_INTERVAL) {
 							beelineCounter = 0;
-							if (System.getDistance(fur.mc_object.x, fur.mc_object.y, fur.pointOfInterest.x, fur.pointOfInterest.y) < ABST_Movable.BEELINE_RANGE &&
+							// Check if we can make a beeline to the target.
+							if (System.inRange(fur.mc_object.x, fur.mc_object.y, fur.pointOfInterest.x, fur.pointOfInterest.y, ABST_Movable.BEELINE_RANGE) &&
 								System.extendedLOScheck(fur, fur.pointOfInterest)) {
-								fur.state = ABST_Movable.STATE_MOVE_FROM_NETWORK;
-								fur.path = [];
-								fur.pathDebug = [];
+								gotoTarget();
+								break;
+							// Check if we can make a beeline to the next node.
+							} else if (fur.path.length > 0 &&
+									   System.inRangeMc(fur.mc_object, fur.path[0].mc_object, ABST_Movable.BEELINE_RANGE) &&
+									   System.extendedLOScheck(fur, new Point(fur.path[0].mc_object.x, fur.path[0].mc_object.y))) {
+								gotoNextNode();
 								break;
 							}
 						}
@@ -39,23 +43,40 @@ package src.cobaltricindustries.fct.props.actor.logic {
 					}
 					fur.moveToPoint(new Point(fur.nodeOfInterest.mc_object.x, fur.nodeOfInterest.mc_object.y));
 					// arrived at next node	
-					if (System.getDistance(fur.mc_object.x, fur.mc_object.y, fur.nodeOfInterest.mc_object.x, fur.nodeOfInterest.mc_object.y) < ABST_Movable.RANGE) {
-						fur.nodeOfInterest = fur.path.shift();
-						if (fur.nodeOfInterest == null) {
-							fur.state = ABST_Movable.STATE_MOVE_FROM_NETWORK;
-							return;
-						}
+					if (System.inRangeMc(fur.mc_object, fur.nodeOfInterest.mc_object, ABST_Movable.RANGE)) {
+						gotoNextNode();
 					}
 					break;
 				case ABST_Movable.STATE_MOVE_FROM_NETWORK:
 					fur.moveToPoint(fur.pointOfInterest);
 					// arrived at destination
-					if (System.getDistance(fur.mc_object.x, fur.mc_object.y, fur.pointOfInterest.x, fur.pointOfInterest.y) < fur.range) {
+					if (System.inRange(fur.mc_object.x, fur.mc_object.y, fur.pointOfInterest.x, fur.pointOfInterest.y, fur.range)) {
 						fur.nodeOfInterest = null;
 						fur.pointOfInterest = null;
 						fur.state = ABST_Movable.STATE_IDLE;
+						// Get ready to immediately check for beeline the next time we need to move.
+						beelineCounter = BEELINE_INTERVAL;
 					}
 					break;
+			}
+		}
+		
+		/**
+		 * Proceed to the target.
+		 */
+		protected function gotoTarget():void {
+			fur.state = ABST_Movable.STATE_MOVE_FROM_NETWORK;
+			fur.path = [];
+			fur.nodeOfInterest = null;
+		}
+		
+		/**
+		 * Proceed to the next node in the path. Switch to STATE_MOVE_FROM_NETWORK if the path is done.
+		 */
+		protected function gotoNextNode():void {
+			fur.nodeOfInterest = fur.path.shift();
+			if (fur.nodeOfInterest == null) {
+				fur.state = ABST_Movable.STATE_MOVE_FROM_NETWORK;
 			}
 		}
 	}

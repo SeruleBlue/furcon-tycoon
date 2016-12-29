@@ -146,6 +146,40 @@ package src.cobaltricindustries.fct {
 			var dy:Number = y1 - y2;
 			return Math.sqrt(dx * dx + dy * dy);
 		}
+		
+		/**
+		 * Gets the distance in px between 2 MovieClips
+		 * @param	from
+		 * @param	to
+		 * @return
+		 */
+		public static function getDistanceMc(from:MovieClip, to:MovieClip):Number {
+			return getDistance(from.x, from.y, to.x, to.y);
+		}
+		
+		/**
+		 * Returns true if the two points are within range of each other
+		 * @param	x1
+		 * @param	y1
+		 * @param	x2
+		 * @param	y2
+		 * @param	range
+		 * @return
+		 */
+		public static function inRange(x1:Number, y1:Number, x2:Number, y2:Number, range:Number):Boolean {
+			return getDistance(x1, y1, x2, y2) <= range;
+		}
+		
+		/**
+		 * Returns true if the two MovieClips are within range of each other
+		 * @param	from
+		 * @param	to
+		 * @param	range
+		 * @return
+		 */
+		public static function inRangeMc(from:MovieClip, to:MovieClip, range:Number):Boolean {
+			return inRange(from.x, from.y, to.x, to.y, range);
+		}
 
 		/**
 		 * Gets the angle between 2 points, returned in degrees
@@ -153,12 +187,22 @@ package src.cobaltricindustries.fct {
 		 * @param	y1
 		 * @param	x2
 		 * @param	y2
-		 * @return					The angle between (x1, y1) and (x2, y2)
+		 * @return	The angle between (x1, y1) and (x2, y2)
 		 */ 
 		public static function getAngle(x1:Number, y1:Number, x2:Number, y2:Number):Number {
 			var dx:Number = x2 - x1;
 			var dy:Number = y2 - y1;
 			return radToDeg(Math.atan2(dy,dx));
+		}
+		
+		/**
+		 * Gets the angle between 2 MovieClips, returned in degrees
+		 * @param	from
+		 * @param	to
+		 * @return
+		 */
+		public static function getAngleMc(from:MovieClip, to:MovieClip):Number {
+			return getAngle(from.x, from.y, to.x, to.y);
 		}
 
 		/**

@@ -66,7 +66,7 @@
 			graphMaster.initNodes("simple");
 			graphMaster.initGraph();
 			
-			graphMaster.debugDrawNetwork();
+			//graphMaster.debugDrawNetwork();
 			
 			// Intitialize the UI
 			ui.setTime(time.getFormattedTime());
