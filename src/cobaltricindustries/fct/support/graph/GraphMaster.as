@@ -57,7 +57,7 @@ package src.cobaltricindustries.fct.support.graph {
 					nodeMap["gn_ln_nw"].connectNodes(["gn_p4_e", "gn_mh_e", "gn_ln_c", "gn_ln_ne", "gn_ln_se"]);
 					nodeMap["gn_ln_c"].connectNodes(["gn_brm", "gn_mh_ce", "gn_mh_e", "gn_ln_nw", "gn_ln_ne", "gn_ln_se"]);
 					nodeMap["gn_ln_ne"].connectNodes(["gn_brf", "gn_ln_nw", "gn_ln_c", "gn_ln_se", "gn_ls_c"]);
-					nodeMap["gn_ls_se"].connectNodes(["gn_ln_nw", "gn_ln_c", "gn_ln_ne", "gn_ls_c", "gn_ls_se"]);
+					nodeMap["gn_ln_se"].connectNodes(["gn_ln_nw", "gn_ln_c", "gn_ln_ne", "gn_ls_c", "gn_ls_se"]);
 					
 					// Main Hall
 					nodeMap["gn_mh_w"].connectNodes(["gn_ball_w", "gn_p0", "gn_p1", "gn_mh_cw"]);
@@ -188,6 +188,23 @@ package src.cobaltricindustries.fct.support.graph {
 			origin.mc_object.x = originalPos.x;
 			origin.mc_object.y = originalPos.y;
 			return nearest;
+		}
+		
+		/**
+		 * Draw the network for debugging purposes.
+		 */
+		public function debugDrawNetwork():void {
+			var mc:MovieClip = new MovieClip();
+			cg.game.addChild(mc);
+			mc.graphics.lineStyle(1, 0xFF0000, 0.25);
+			for each (var node:GraphNode in nodes) {
+				mc.graphics.drawCircle(node.mc_object.x, node.mc_object.y, 15);
+				for each (var other:GraphNode in node.edges) {
+					mc.graphics.moveTo(node.mc_object.x, node.mc_object.y);
+					mc.graphics.lineTo(other.mc_object.x, other.mc_object.y);
+				}
+			}
+			trace('[GraphMaster] WARNING: Network debugging enabled.');
 		}
 	}
 }

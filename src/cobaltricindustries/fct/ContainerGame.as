@@ -66,6 +66,8 @@
 			graphMaster.initNodes("simple");
 			graphMaster.initGraph();
 			
+			graphMaster.debugDrawNetwork();
+			
 			// Intitialize the UI
 			ui.setTime(time.getFormattedTime());
 			ui.setDay(time.day);
@@ -80,8 +82,12 @@
 				return completed;
 			}
 			// Otherwise, do stuff first.
-			metaManager.step();
-			
+			Time.stepCounter = 0;
+			for (var i:int = 0; i < time.gameSpeed; i++) {
+				metaManager.step();
+				Time.stepCounter++;
+			}
+
 			return completed;
 		}
 

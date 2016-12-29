@@ -6,40 +6,44 @@ package src.cobaltricindustries.fct.props {
 	import src.cobaltricindustries.fct.ContainerGame;
 	import src.cobaltricindustries.fct.support.graph.GraphNode;
 	import src.cobaltricindustries.fct.System;
+	import src.cobaltricindustries.fct.support.Time;
 	
 	/**
 	 * Object that can move inside the hotel.
 	 * @author Serule Blue
 	 */
 	public class ABST_Movable extends ABST_Object {
-		private const NORMAL_SPEED:Number = 2;
-		private const PRECISE_SPEED:Number = 0.75;
+		protected const NORMAL_SPEED:Number = 2;
+		protected const PRECISE_SPEED:Number = 0.75;
 		
-		private var range:Number = 5;			// current range
-		private const RANGE:Number = 5;			// node clear range
-		private const MOVE_RANGE:Number = 2;	// diff on movement
-		private const BEELINE_RANGE:Number = 40;
+		protected var range:Number = 5;				// current range
+		protected const RANGE:Number = 5;			// node clear range
+		protected const MOVE_RANGE:Number = 2;		// diff on movement
+		protected const BEELINE_RANGE:Number = 40;
 		
-		private const BEELINE_INTERVAL:int = 15;	// how often to check for beeline
-		private var beelineCounter:int = 0;
+		protected const BEELINE_INTERVAL:int = 15;	// how often to check for beeline
+		protected var beelineCounter:int = 0;
 		
 		private var enum:int = 0;
 		
-		private var state:int;
-		private const STATE_IDLE:int = enum++;
-		private const STATE_STUCK:int = enum++;
-		private const STATE_MOVE_FREE:int = enum++;
-		private const STATE_MOVE_NETWORK:int = enum++;
-		private const STATE_MOVE_FROM_NETWORK:int = enum++;
+		protected var state:int;
+		protected const STATE_IDLE:int = enum++;
+		protected const STATE_STUCK:int = enum++;
+		protected const STATE_MOVE_FREE:int = enum++;
+		protected const STATE_MOVE_NETWORK:int = enum++;
+		protected const STATE_MOVE_FROM_NETWORK:int = enum++;
 
 		public var hitMask:MovieClip;
 		
-		private var pointOfInterest:Point;
+		protected var pointOfInterest:Point;
 		/// Goal GraphNode.
-		private var nodeOfInterest:GraphNode;
+		protected var nodeOfInterest:GraphNode;
 		/// Ordered list of GraphNodes to visit to get to the nodeOfInterest.
-		private var path:Array;
-		private var pathDebug:Array;
+		protected var path:Array;
+		protected var pathDebug:Array;
+		
+		protected var debuggingEnabled:Boolean = false;
+		protected var debugMc:MovieClip;
 
 		public function ABST_Movable(_cg:ContainerGame, _mc_object:MovieClip, _hitMask:MovieClip) {
 			super(_cg, _mc_object);
@@ -55,21 +59,18 @@ package src.cobaltricindustries.fct.props {
 			mc_object.addEventListener(MouseEvent.CLICK, onClick);
 		}
 		
-		private function onClick(e:MouseEvent):void {
-			trace(this + " destination is " + nodeOfInterest.mc_object.name);
-			var s:String;
-			for each (var n:GraphNode in pathDebug) {
-				s += n.mc_object.name + " ";
-			}
-			trace(this + " path is " + s);
+		protected function onClick(e:MouseEvent):void {
 		}
 		
-		override public function step():Boolean {			
+		override public function step():Boolean {
+			if (debuggingEnabled) {
+				handleDebug();
+			}
+			
 			switch (state) {
 				case STATE_IDLE:
-					if (nodeOfInterest == null) {
-						nodeOfInterest = System.getRandFrom(cg.graphMaster.nodes);
-						setPOI(new Point(nodeOfInterest.mc_object.x, nodeOfInterest.mc_object.y));
+					if (pointOfInterest == null) {
+						setPOI(System.getRandomValidLocation(this));
 					}
 				break;
 				case STATE_MOVE_NETWORK:
@@ -86,7 +87,6 @@ package src.cobaltricindustries.fct.props {
 							}
 						}
 					}
-				
 					if (nodeOfInterest == null) {
 						state = STATE_MOVE_FROM_NETWORK;
 						return completed;
@@ -106,12 +106,11 @@ package src.cobaltricindustries.fct.props {
 					// arrived at destination
 					if (System.getDistance(mc_object.x, mc_object.y, pointOfInterest.x, pointOfInterest.y) < range) {
 						nodeOfInterest = null;
+						pointOfInterest = null;
 						state = STATE_IDLE;
 					}
 				break;
-			}
-			
-			
+			}			
 			return false;
 		}
 		
@@ -162,33 +161,32 @@ package src.cobaltricindustries.fct.props {
 		 * Takes a step to the given target.
 		 * @param	tgt
 		 */
-		public function moveToPoint(tgt:Point):void {
-			var moveSpeedX:Number;
-			var moveSpeedY:Number;
-			if (Math.abs(mc_object.x - tgt.x) < NORMAL_SPEED)
-				moveSpeedX = PRECISE_SPEED;
-			else
-				moveSpeedX = NORMAL_SPEED;
-			if (Math.abs(mc_object.y - tgt.y) < NORMAL_SPEED)
-				moveSpeedY = PRECISE_SPEED;
-			else
-				moveSpeedY = NORMAL_SPEED;
-				
-			var dX:Number = 0;
-			var dY:Number = 0;
-			
-			if (mc_object.y > tgt.y + MOVE_RANGE) {
-				dY = -moveSpeedY;
-			} else if (mc_object.y < tgt.y - MOVE_RANGE) {
-				dY = moveSpeedY;
+		public function moveToPoint(tgt:Point):void {			
+			var spd:int = System.getDistance(mc_object.x, mc_object.y, tgt.x, tgt.y) < RANGE ? PRECISE_SPEED : NORMAL_SPEED;
+			var tgtAngle:Number = System.getAngle(mc_object.x, mc_object.y, tgt.x, tgt.y);
+			updatePosition(System.forward(spd, tgtAngle, true), System.forward(spd, tgtAngle, false));
+		}
+		
+		public function enableDebugging():void {
+			debuggingEnabled = true;
+			debugMc = new MovieClip();
+			cg.game.addChild(debugMc);			
+		}
+		
+		private function handleDebug():void {
+			if (Time.isKeyframe()) {
+				debugMc.graphics.clear();
+				if (nodeOfInterest != null) {
+					debugMc.graphics.lineStyle(2, 0x0000FF, 0.25);
+					debugMc.graphics.moveTo(mc_object.x, mc_object.y);
+					debugMc.graphics.lineTo(nodeOfInterest.mc_object.x, nodeOfInterest.mc_object.y);
+				}
+				if (pointOfInterest != null) {
+					debugMc.graphics.lineStyle(2, 0x00FFFF, 0.25);
+					debugMc.graphics.moveTo(mc_object.x, mc_object.y);
+					debugMc.graphics.lineTo(pointOfInterest.x, pointOfInterest.y);
+				}
 			}
-			if (mc_object.x < tgt.x - MOVE_RANGE) {
-				dX = moveSpeedX;
-			} else if (mc_object.x > tgt.x + MOVE_RANGE) {
-				dX = -moveSpeedX;
-			}
-			
-			updatePosition(dX, dY);
 		}
 	}
 }

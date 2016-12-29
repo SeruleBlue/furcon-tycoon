@@ -1,4 +1,5 @@
 package src.cobaltricindustries.fct.props.actor {
+	import flash.events.MouseEvent;
 	import src.cobaltricindustries.fct.ContainerGame;
 	import src.cobaltricindustries.fct.props.ABST_Movable;
 	import src.cobaltricindustries.fct.System;
@@ -10,7 +11,6 @@ package src.cobaltricindustries.fct.props.actor {
 	 * @author Serule Blue
 	 */
 	public class Fur extends ABST_Movable {
-		
 		public var handle:String = "Anonymous Furry";
 		public var age:int = 22;
 		
@@ -32,6 +32,13 @@ package src.cobaltricindustries.fct.props.actor {
 		override public function step():Boolean {
 			updateStats();
 			return super.step();
+		}
+		
+		override protected function onClick(e:MouseEvent):void {
+			var out:String = handle + " (" + age + ")\n";
+			out += "HAP: " + stats["happiness"][0] + "\n";
+			out += "NoI: " + nodeOfInterest.mc_object.name + "\n";
+			cg.ui.setDebug(out);
 		}
 	}
 }

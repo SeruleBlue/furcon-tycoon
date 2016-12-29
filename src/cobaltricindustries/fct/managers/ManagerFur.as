@@ -12,10 +12,11 @@ package src.cobaltricindustries.fct.managers {
 			
 			// Temporary dev code!
 			var fur:Fur;
-			for (var i:int = 0; i < 12; i++) {
+			for (var i:int = 0; i < 15; i++) {
 				fur = new Fur(cg, new SWC_Fur());
 				cg.game.addChild(fur.mc_object);
 				addObject(fur);
+				fur.enableDebugging();
 			}
 		}
 		

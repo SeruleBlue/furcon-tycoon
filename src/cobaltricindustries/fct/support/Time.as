@@ -7,16 +7,16 @@ package src.cobaltricindustries.fct.support {
 	 * @author Serule Blue
 	 */
 	public class Time extends ABST_Support {
-		// Index into System.DAYS
+		/// Index into System.DAYS
 		public var day:int = 1;
-		// The current hour, in 24-hour format.
+		/// The current hour, in 24-hour format. (0 == midnight)
 		public var hour:int = 8;
 		public var minute:int = 0;
 		
 		/// The current count of the number of frames.
 		public var frameCounter:int = 0;
 		
-		public var gameSpeed:int = 1;
+		public var gameSpeed:int = 4;
 		/// If gameSpeed > 0, keeps track of what additional step we're on (useful to only call UI when = 0)
 		public static var stepCounter:int;
 		
@@ -45,9 +45,7 @@ package src.cobaltricindustries.fct.support {
 						cg.ui.setDay(day);
 					}
 				}
-				if (Time.isKeyframe()) {
-					cg.ui.setTime(getFormattedTime());
-				}
+				cg.ui.setTime(getFormattedTime());
 			}
 		}
 
@@ -56,8 +54,15 @@ package src.cobaltricindustries.fct.support {
 		 * @return
 		 */
 		public function getFormattedTime():String {
-			var isAm:Boolean = hour < 12;
-			var strHour:String = (hour % 12).toString(); //System.pad(hour % 12);
+			var isAm:Boolean = hour < 12 || hour == 24;
+			var strHour:String;
+			if (hour == 0) {
+				strHour = "12"; 
+			} else if (hour > 12) {
+				strHour = (hour - 12).toString();
+			} else {
+				strHour = hour.toString();
+			}
 			var strMinute:String = System.pad(minute);
 			return strHour + ":" + strMinute + " " + (isAm ? "am" : "pm");
 		}

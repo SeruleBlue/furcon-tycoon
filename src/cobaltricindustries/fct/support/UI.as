@@ -55,5 +55,9 @@ package src.cobaltricindustries.fct.support {
 		public function setDay(day:int):void {
 			ui.tf_day.text = System.DAYS[day];
 		}
+		
+		public function setDebug(str:String):void {
+			ui.tf_debug.text = str;
+		}
 	}
 }

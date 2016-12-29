@@ -67,6 +67,20 @@ package src.cobaltricindustries.fct {
 		}
 		
 		/**
+		 * Gets a random point in the room that isn't in the wall
+		 * @param	origin	ABST_Movable whose hitbox to use
+		 * @return			A valid point
+		 */
+		public static function getRandomValidLocation(origin:ABST_Movable):Point {
+			var tgt:Point;
+			while (tgt == null || !origin.isPointValid(tgt)) {
+				tgt = new Point(getRandInt( -GAME_HALF_WIDTH + 40, GAME_HALF_WIDTH - 40),
+								getRandInt( -GAME_HALF_HEIGHT + 40, GAME_HALF_HEIGHT - 40));
+			}
+			return tgt;
+		}
+		
+		/**
 		 * Returns a random color from the 4 main colors (RGYB)
 		 * @param	excludes	An Array of colors to exclude, else null
 		 * @return				A random color from the 4 main colors, excluding colors in excludes
