@@ -13,37 +13,34 @@ package src.cobaltricindustries.fct.props {
 	 * @author Serule Blue
 	 */
 	public class ABST_Movable extends ABST_Object {
-		protected const NORMAL_SPEED:Number = 2;
-		protected const PRECISE_SPEED:Number = 0.75;
+		public static const NORMAL_SPEED:Number = 2;
+		public static const PRECISE_SPEED:Number = 0.75;
 		
-		protected var range:Number = 5;				// current range
-		protected const RANGE:Number = 5;			// node clear range
-		protected const MOVE_RANGE:Number = 2;		// diff on movement
-		protected const BEELINE_RANGE:Number = 40;
+		public var range:Number = 5;				// current range
+		public static const RANGE:Number = 5;			// node clear range
+		public static const MOVE_RANGE:Number = 2;		// diff on movement
+		public static const BEELINE_RANGE:Number = 40;
 		
-		protected const BEELINE_INTERVAL:int = 15;	// how often to check for beeline
-		protected var beelineCounter:int = 0;
+		private static var enum:int = 0;
 		
-		private var enum:int = 0;
-		
-		protected var state:int;
-		protected const STATE_IDLE:int = enum++;
-		protected const STATE_STUCK:int = enum++;
-		protected const STATE_MOVE_FREE:int = enum++;
-		protected const STATE_MOVE_NETWORK:int = enum++;
-		protected const STATE_MOVE_FROM_NETWORK:int = enum++;
+		public var state:int;
+		public static const STATE_IDLE:int = enum++;
+		public static const STATE_STUCK:int = enum++;
+		public static const STATE_MOVE_FREE:int = enum++;
+		public static const STATE_MOVE_NETWORK:int = enum++;
+		public static const STATE_MOVE_FROM_NETWORK:int = enum++;
 
 		public var hitMask:MovieClip;
 		
-		protected var pointOfInterest:Point;
+		public var pointOfInterest:Point;
 		/// Goal GraphNode.
-		protected var nodeOfInterest:GraphNode;
+		public var nodeOfInterest:GraphNode;
 		/// Ordered list of GraphNodes to visit to get to the nodeOfInterest.
-		protected var path:Array;
-		protected var pathDebug:Array;
+		public var path:Array;
+		public var pathDebug:Array;
 		
-		protected var debuggingEnabled:Boolean = false;
-		protected var debugMc:MovieClip;
+		public var debuggingEnabled:Boolean = false;
+		public var debugMc:MovieClip;
 
 		public function ABST_Movable(_cg:ContainerGame, _mc_object:MovieClip, _hitMask:MovieClip) {
 			super(_cg, _mc_object);
@@ -65,52 +62,7 @@ package src.cobaltricindustries.fct.props {
 		override public function step():Boolean {
 			if (debuggingEnabled) {
 				handleDebug();
-			}
-			
-			switch (state) {
-				case STATE_IDLE:
-					if (pointOfInterest == null) {
-						setPOI(System.getRandomValidLocation(this));
-					}
-				break;
-				case STATE_MOVE_NETWORK:
-					if (pointOfInterest != null) {
-						// Check if we can make a beeline to the target.
-						if (++beelineCounter >= BEELINE_INTERVAL) {
-							beelineCounter = 0;
-							if (System.getDistance(mc_object.x, mc_object.y, pointOfInterest.x, pointOfInterest.y) < BEELINE_RANGE &&
-								System.extendedLOScheck(this, pointOfInterest)) {
-								state = STATE_MOVE_FROM_NETWORK;
-								path = [];
-								pathDebug = [];
-								break;
-							}
-						}
-					}
-					if (nodeOfInterest == null) {
-						state = STATE_MOVE_FROM_NETWORK;
-						return completed;
-					}
-					moveToPoint(new Point(nodeOfInterest.mc_object.x, nodeOfInterest.mc_object.y));
-					// arrived at next node	
-					if (System.getDistance(mc_object.x, mc_object.y, nodeOfInterest.mc_object.x, nodeOfInterest.mc_object.y) < RANGE) {
-						nodeOfInterest = path.shift();
-						if (nodeOfInterest == null) {
-							state = STATE_MOVE_FROM_NETWORK;
-							return completed;
-						}
-					}
-				break;
-				case STATE_MOVE_FROM_NETWORK:
-					moveToPoint(pointOfInterest);
-					// arrived at destination
-					if (System.getDistance(mc_object.x, mc_object.y, pointOfInterest.x, pointOfInterest.y) < range) {
-						nodeOfInterest = null;
-						pointOfInterest = null;
-						state = STATE_IDLE;
-					}
-				break;
-			}			
+			}		
 			return false;
 		}
 		
@@ -118,7 +70,7 @@ package src.cobaltricindustries.fct.props {
 		 * Set the POI and calculate a new path
 		 * @param	p		new POI
 		 */
-		private function setPOI(p:Point):void {
+		protected function setPOI(p:Point):void {
 			pointOfInterest = p;
 			path = cg.graphMaster.getPath(this, pointOfInterest);
 			pathDebug = path.concat([]);

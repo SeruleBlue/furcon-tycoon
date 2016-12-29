@@ -16,7 +16,8 @@ package src.cobaltricindustries.fct.support {
 		/// The current count of the number of frames.
 		public var frameCounter:int = 0;
 		
-		public var gameSpeed:int = 4;
+		/// Number of updates per frame (default 1).
+		public var gameSpeed:int = 1;
 		/// If gameSpeed > 0, keeps track of what additional step we're on (useful to only call UI when = 0)
 		public static var stepCounter:int;
 		
