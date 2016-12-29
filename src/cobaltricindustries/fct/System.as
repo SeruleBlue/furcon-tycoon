@@ -31,7 +31,8 @@ package src.cobaltricindustries.fct {
 		// timing constants
 		public static const SECOND:int = 30;
 		public static const MINUTE:int = SECOND * 60;
-		public static const TAILS_NORMAL:int = SECOND * 5;
+		public static const FRAMES_IN_MINUTE:int = 15;		// number of frames to elapse in a game-minute
+		public static const DAYS:Array = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 		
 		// volume constants
 		public static const VOL_BGM:Number = .4;
@@ -213,6 +214,20 @@ package src.cobaltricindustries.fct {
 		
 		public static function setWithinLimits(newValue:Number, limLow:Number = int.MIN_VALUE, limHigh:Number = int.MAX_VALUE):Number {
 			return Math.max(Math.min(newValue, limHigh), limLow);
+		}
+		
+		/**
+		 * Pads a number with leading 0's as needed.
+		 * @param	num		the number to pad [0-99]
+		 * @return
+		 */
+		public static function pad(num:int):String {
+			// TODO pad for arbitary number of 0's, if needed
+			var numString:String = "";
+			if (num < 10) {
+				numString = "0";
+			}
+			return numString + num.toString();
 		}
 		
 		/**

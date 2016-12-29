@@ -5,6 +5,9 @@ package src.cobaltricindustries.fct.managers {
 
 	/**
 	 * Abstract Manager class, for managing mulitple instances of related objects.
+	 *	Differs from ABST_Support because they focus on managing ABST_Objects,
+	 * 	rather than specific support utilities.
+	 * Managed by MetaManager.
 	 * @author Serule Blue
 	 */
 	public class ABST_Manager {

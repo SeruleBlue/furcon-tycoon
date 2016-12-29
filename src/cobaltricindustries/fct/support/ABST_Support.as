@@ -2,7 +2,10 @@ package src.cobaltricindustries.fct.support {
 	import src.cobaltricindustries.fct.ContainerGame;
 
 	/**
-	 * Abstract support class
+	 * Abstract support class.
+	 * Differs from ABST_Manager in that they perform specialized actions,
+	 * 	rather than keeping track of ABST_Objects.
+	 * Managed by MetaManager.
 	 * @author Serule Blue
 	 */
 	public class ABST_Support {

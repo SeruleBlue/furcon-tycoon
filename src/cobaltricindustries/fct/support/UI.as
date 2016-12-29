@@ -1,6 +1,7 @@
 package src.cobaltricindustries.fct.support {
 	import flash.display.MovieClip;
 	import src.cobaltricindustries.fct.ContainerGame;
+	import src.cobaltricindustries.fct.System;
 	
 	/**
 	 * Handles anything to do with the game UI.
@@ -13,7 +14,6 @@ package src.cobaltricindustries.fct.support {
 		
 		public function UI(_cg:ContainerGame) {
 			super(_cg);
-			
 			ui = cg.game.mc_ui;
 		}
 		
@@ -38,6 +38,22 @@ package src.cobaltricindustries.fct.support {
 					}
 				}
 			}
+		}
+		
+		/**
+		 * Sets the main UI with the given time
+		 * @param	time	String time format
+		 */
+		public function setTime(time:String):void {
+			ui.tf_time.text = time;
+		}
+		
+		/**
+		 * Sets the main UI with the given day
+		 * @param	day		Index of current day in System.DAYS
+		 */
+		public function setDay(day:int):void {
+			ui.tf_day.text = System.DAYS[day];
 		}
 	}
 }

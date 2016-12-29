@@ -2,13 +2,13 @@ package src.cobaltricindustries.fct.managers {
 	import src.cobaltricindustries.fct.ContainerGame;
 	import src.cobaltricindustries.fct.System;
 	/**
-	 * Manages the Managers.
+	 * Manages the Managers and Support classes.
 	 * @author Serule Blue
 	 */
 	public class MetaManager {
 		protected var cg:ContainerGame;
 		
-		/// An array of ABST_Managers.
+		/// An array of ABST_Managers and ABST_Supports.
 		private var managerArray:Array;
 		
 		/// Maps a string key to a manager.
@@ -22,7 +22,7 @@ package src.cobaltricindustries.fct.managers {
 		
 		/**
 		 * Called once per frame by ContainerGame
-		 * Step all of the objects in objArray (and stop keeping track of those that are completed)
+		 * Step all of the objects in managerArray
 		 */
 		public function step():void {
 			if (managerArray.length > 0) {
@@ -33,11 +33,11 @@ package src.cobaltricindustries.fct.managers {
 		}
 		
 		/**
-		 * Add an ABST_Manager to be managed
-		 * @param	man		an ABST_Manager to be managed
+		 * Add an ABST_Manager or ABST_Support to be managed
+		 * @param	man		class to be managed
 		 * @param	key		the man's identifier
 		 */
-		public function addManager(man:ABST_Manager, key:String):void {
+		public function addManager(man:*, key:String):void {
 			if (managerArray) {
 				managerMap[key] = man;
 				managerArray.push(man);

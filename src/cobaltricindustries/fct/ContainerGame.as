@@ -15,6 +15,7 @@
 	import flash.media.SoundMixer;
 	import flash.events.MouseEvent;
 	import flash.utils.getTimer;
+	import src.cobaltricindustries.fct.support.Time;
 	import src.cobaltricindustries.fct.support.UI;
 	
 	/**
@@ -32,7 +33,9 @@
 		public var graphMaster:GraphMaster;
 	
 		public var metaManager:MetaManager;
+		
 		public var ui:UI;
+		public var time:Time;
 
 		/**
 		 * A MovieClip containing all of a FCT level
@@ -56,10 +59,16 @@
 			metaManager.addManager(new ManagerFur(this), "fur");
 			
 			ui = new UI(this);
+			time = new Time(this);
+			metaManager.addManager(time, "time");
 			
 			graphMaster = new GraphMaster(this);
 			graphMaster.initNodes("simple");
 			graphMaster.initGraph();
+			
+			// Intitialize the UI
+			ui.setTime(time.getFormattedTime());
+			ui.setDay(time.day);
 		}
 		
 		/**
@@ -71,7 +80,6 @@
 				return completed;
 			}
 			// Otherwise, do stuff first.
-			
 			metaManager.step();
 			
 			return completed;
