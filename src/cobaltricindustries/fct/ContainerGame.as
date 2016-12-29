@@ -15,6 +15,8 @@
 	import flash.media.SoundMixer;
 	import flash.events.MouseEvent;
 	import flash.utils.getTimer;
+	import src.cobaltricindustries.fct.support.graph.Hotel;
+	import src.cobaltricindustries.fct.support.Schedule;
 	import src.cobaltricindustries.fct.support.Time;
 	import src.cobaltricindustries.fct.support.UI;
 	
@@ -36,6 +38,8 @@
 		
 		public var ui:UI;
 		public var time:Time;
+		public var schedule:Schedule;
+		public var hotel:Hotel;
 
 		/**
 		 * A MovieClip containing all of a FCT level
@@ -61,6 +65,9 @@
 			ui = new UI(this);
 			time = new Time(this);
 			metaManager.addManager(time, "time");
+			
+			hotel = new Hotel("The Harriot");
+			schedule = new Schedule(this, hotel);
 			
 			graphMaster = new GraphMaster(this);
 			graphMaster.initNodes("simple");

@@ -373,5 +373,18 @@ package src.cobaltricindustries.fct {
 				total += n;
 			return total / values.length;
 		}
+		
+		public static function toTimestamp(hours:int, minutes:int):int {
+			return hours * 60 + minutes;
+		}
+		
+		/**
+		 * Converts a timestamp to [hours, minutes]
+		 * @param	timestamp
+		 * @return
+		 */
+		public static function fromTimestamp(timestamp:int):Array {
+			return [timestamp / 60, timestamp % 60];
+		}
 	}
 }

@@ -5,7 +5,8 @@ package src.cobaltricindustries.fct.props {
 	import flash.geom.Point;
 
 	/**
-	 * An abstract class containing functionality useful to all game objects
+	 * An abstract class containing functionality useful to all game objects.
+	 * Should be managed by an ABST_Manager.
 	 * @author Serule Blue
 	 */
 	public class ABST_Object {
