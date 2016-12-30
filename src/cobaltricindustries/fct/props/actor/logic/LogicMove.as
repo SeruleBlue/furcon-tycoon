@@ -2,6 +2,7 @@ package src.cobaltricindustries.fct.props.actor.logic {
 	import src.cobaltricindustries.fct.props.actor.Fur;
 	import src.cobaltricindustries.fct.System;
 	import src.cobaltricindustries.fct.props.ABST_Movable;
+	import src.cobaltricindustries.fct.SM;
 	import flash.geom.Point;
 	
 	/**
@@ -9,17 +10,19 @@ package src.cobaltricindustries.fct.props.actor.logic {
 	 * @author Serule Blue
 	 */
 	public class LogicMove extends ABST_Logic {
-	
 		public static const BEELINE_INTERVAL:int = 15;	// how often to check for beeline
 		public var beelineCounter:int = System.getRandInt(0, BEELINE_INTERVAL);
+		
+		/// Logic to run after movement is complete.
+		public var callbackLogic:ABST_Logic;
 
 		public function LogicMove(fur_:Fur) {
 			super(fur_);
-		}	
+		}
 		
 		override public function runLogic(...args):void {
 			switch (fur.state) {
-				case ABST_Movable.STATE_MOVE_NETWORK:
+				case SM.STATE_MOVE_NETWORK:
 					if (fur.pointOfInterest != null) {
 						if (++beelineCounter >= BEELINE_INTERVAL) {
 							beelineCounter = 0;
@@ -38,7 +41,7 @@ package src.cobaltricindustries.fct.props.actor.logic {
 						}
 					}
 					if (fur.nodeOfInterest == null) {
-						fur.state = ABST_Movable.STATE_MOVE_FROM_NETWORK;
+						fur.state = SM.STATE_MOVE_FROM_NETWORK;
 						return;
 					}
 					fur.moveToPoint(new Point(fur.nodeOfInterest.mc_object.x, fur.nodeOfInterest.mc_object.y));
@@ -47,7 +50,7 @@ package src.cobaltricindustries.fct.props.actor.logic {
 						gotoNextNode();
 					}
 					break;
-				case ABST_Movable.STATE_MOVE_FROM_NETWORK:
+				case SM.STATE_MOVE_FROM_NETWORK:
 					fur.moveToPoint(fur.pointOfInterest);
 					// arrived at destination
 					if (System.inRange(fur.mc_object.x, fur.mc_object.y, fur.pointOfInterest.x, fur.pointOfInterest.y, fur.range)) {
@@ -58,10 +61,10 @@ package src.cobaltricindustries.fct.props.actor.logic {
 		}
 		
 		/**
-		 * Proceed to the target.
+		 * Proceed directly to the target.
 		 */
 		protected function gotoTarget():void {
-			fur.state = ABST_Movable.STATE_MOVE_FROM_NETWORK;
+			fur.state = SM.STATE_MOVE_FROM_NETWORK;
 			fur.path = [];
 			fur.nodeOfInterest = null;
 		}
@@ -72,7 +75,7 @@ package src.cobaltricindustries.fct.props.actor.logic {
 		protected function gotoNextNode():void {
 			fur.nodeOfInterest = fur.path.shift();
 			if (fur.nodeOfInterest == null) {
-				fur.state = ABST_Movable.STATE_MOVE_FROM_NETWORK;
+				fur.state = SM.STATE_MOVE_FROM_NETWORK;
 			}
 		}
 		
@@ -82,9 +85,12 @@ package src.cobaltricindustries.fct.props.actor.logic {
 		protected function onArrive():void {
 			fur.nodeOfInterest = null;
 			fur.pointOfInterest = null;
-			fur.state = ABST_Movable.STATE_IDLE;
+			fur.state = SM.STATE_IDLE;
 			// Get ready to immediately check for beeline the next time we need to move.
 			beelineCounter = BEELINE_INTERVAL;
+			if (callbackLogic) {
+				callbackLogic.runLogic("arrive");
+			}
 		}
 	}
 }

@@ -76,7 +76,7 @@ package src.cobaltricindustries.fct {
 		}
 		
 		/**
-		 * Gets a random point in the room that isn't in the wall
+		 * Gets a random point in the hotel that isn't in the wall.
 		 * @param	origin	ABST_Movable whose hitbox to use
 		 * @return			A valid point
 		 */
@@ -87,6 +87,16 @@ package src.cobaltricindustries.fct {
 								getRandInt( -GAME_HALF_HEIGHT + 40, GAME_HALF_HEIGHT - 40));
 			}
 			return tgt;
+		}
+		
+		/**
+		 * Gets a random point in the room.
+		 * @param	room
+		 * @return
+		 */
+		public static function getRandomValidLocationInRoom(room:MovieClip):Point {
+			return new Point(getRandNum(room.x - room.width * .5, room.x + room.width * .5),
+							 getRandNum(room.y - room.height * .5, room.y + room.height * .5));
 		}
 		
 		/**

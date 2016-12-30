@@ -11,7 +11,7 @@ package src.cobaltricindustries.fct.props {
 	 */
 	public class ABST_Object {
 		/// A reference to the active instance of ContainerGame
-		protected var cg:ContainerGame;
+		public var cg:ContainerGame;
 		
 		/// The MovieClip associated with this object (The actual graphic on the stage)
 		public var mc_object:MovieClip;
@@ -20,7 +20,7 @@ package src.cobaltricindustries.fct.props {
 		protected var completed:Boolean = false;
 		
 		/// Dictionary of numeric stats for this object. string -> [current, min, max, update_amount, update_counter, update_frequency]
-		protected var stats:Object = { };
+		public var stats:Object = { };
 		
 		/// Helper for use in ABST_Manager.getNearby
 		public var nearDistance:Number = 0;

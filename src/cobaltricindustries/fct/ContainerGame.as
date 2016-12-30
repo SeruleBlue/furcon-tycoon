@@ -56,26 +56,28 @@
 		
 		protected function init(e:Event):void {
 			game.removeEventListener(Event.ADDED_TO_STAGE, init);
-			
 			hitbox = game.mc_innerContainer.mc_collisionBox;
 			
 			metaManager = new MetaManager(this);
-			metaManager.addManager(new ManagerFur(this), "fur");
 			
-			ui = new UI(this);
-			time = new Time(this);
-			metaManager.addManager(time, "time");
-			
-			hotel = new Hotel("The Harriot");
-			schedule = new Schedule(this, hotel);
-			
+			// Initialize the Graph Network.
 			graphMaster = new GraphMaster(this);
 			graphMaster.initNodes("simple");
 			graphMaster.initGraph();
 			
+			// Initialize support classes.
+			ui = new UI(this);
+			time = new Time(this);
+			metaManager.addManager(time, "time");
+			hotel = new Hotel(this, "The Harriot");
+			schedule = new Schedule(this, hotel);
+			
+			// Initialize Managers.
+			metaManager.addManager(new ManagerFur(this), "fur");
+			
 			//graphMaster.debugDrawNetwork();
 			
-			// Intitialize the UI
+			// Intitialize the UI.
 			ui.setTime(time.getFormattedTime());
 			ui.setDay(time.day);
 		}

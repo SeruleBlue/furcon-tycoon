@@ -30,10 +30,13 @@ package src.cobaltricindustries.fct.support.graph {
 			nodeMap = { };
 			
 			// Add all of the GraphNodes.
+			// Also hide all of the room MovieClips.
 			for (var i:int = 0; i < ic.numChildren; i++) {
 				var obj:DisplayObject = ic.getChildAt(i);
 				if (obj.name.indexOf("gn_") == 0) {
 					addNode(obj as MovieClip);
+				} else if (obj.name.indexOf("rm_") == 0) {
+					obj.visible = false;
 				}
 			}
 

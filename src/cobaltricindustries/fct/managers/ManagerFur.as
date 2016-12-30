@@ -14,17 +14,13 @@ package src.cobaltricindustries.fct.managers {
 			
 			// Temporary dev code!
 			var fur:Fur;
-			var first:Fur;
 			for (var i:int = 0; i < 15; i++) {
 				fur = new Fur(cg, new SWC_Fur());
 				cg.game.addChild(fur.mc_object);
-				if (!first) {
-					first = fur;
-				} else {
-					var pt:Point = System.getRandomValidLocation(first);
-					fur.mc_object.x = pt.x; fur.mc_object.y = pt.y;
-				}
+				var pt:Point = System.getRandomValidLocationInRoom(cg.game.mc_innerContainer.rm_ls);
+				fur.mc_object.x = pt.x; fur.mc_object.y = pt.y;
 				addObject(fur);
+				fur.schedule = cg.schedule;
 				//fur.enableDebugging();
 			}
 		}

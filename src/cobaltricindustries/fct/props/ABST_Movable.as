@@ -4,9 +4,11 @@ package src.cobaltricindustries.fct.props {
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import src.cobaltricindustries.fct.ContainerGame;
+	import src.cobaltricindustries.fct.props.actor.Fur;
 	import src.cobaltricindustries.fct.support.graph.GraphNode;
 	import src.cobaltricindustries.fct.System;
 	import src.cobaltricindustries.fct.support.Time;
+	import src.cobaltricindustries.fct.SM;
 	
 	/**
 	 * Object that can move inside the hotel.
@@ -22,14 +24,8 @@ package src.cobaltricindustries.fct.props {
 		public static const MOVE_RANGE:Number = 2;		// diff on movement
 		public static const BEELINE_RANGE:Number = 300;	// max distance from target to consider making a beeline
 		
-		private static var enum:int = 0;
-		
+		/// One of SM.STATE variables.
 		public var state:int;
-		public static const STATE_IDLE:int = enum++;
-		public static const STATE_STUCK:int = enum++;
-		public static const STATE_MOVE_FREE:int = enum++;
-		public static const STATE_MOVE_NETWORK:int = enum++;
-		public static const STATE_MOVE_FROM_NETWORK:int = enum++;
 
 		public var hitMask:MovieClip;
 		
@@ -46,7 +42,7 @@ package src.cobaltricindustries.fct.props {
 			super(_cg, _mc_object);
 			hitMask = _hitMask;
 			
-			state = STATE_IDLE;
+			state = SM.STATE_IDLE;
 			
 			mc_object.addEventListener(Event.ADDED_TO_STAGE, init);
 		}
@@ -79,9 +75,9 @@ package src.cobaltricindustries.fct.props {
 				if (path.length != 0) {
 					nodeOfInterest = path[0];
 				}
-				state = STATE_MOVE_NETWORK;
+				state = SM.STATE_MOVE_NETWORK;
 			} else {
-				state = STATE_MOVE_FROM_NETWORK;
+				state = SM.STATE_MOVE_FROM_NETWORK;
 			}
 			range = RANGE;
 		}
@@ -142,6 +138,11 @@ package src.cobaltricindustries.fct.props {
 					debugMc.graphics.lineStyle(2, speed == NORMAL_SPEED ? 0x00FFFF : 0xFF00FF, 0.25);
 					debugMc.graphics.moveTo(mc_object.x, mc_object.y);
 					debugMc.graphics.lineTo(pointOfInterest.x, pointOfInterest.y);
+				}
+				if ((this is Fur) && (this as Fur).eventOfInterest != null) {
+					debugMc.graphics.lineStyle(4, 0x00FF00, 0.25);
+					debugMc.graphics.moveTo(mc_object.x, mc_object.y);
+					debugMc.graphics.lineTo((this as Fur).eventOfInterest.room.mc_room.x, (this as Fur).eventOfInterest.room.mc_room.y);
 				}
 			}
 		}

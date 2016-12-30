@@ -19,8 +19,14 @@ package src.cobaltricindustries.fct.props.actor.logic {
 				return;
 			}
 			
+			// Attempt to schedule and attend an event.
+			else if (fur.eventOfInterest == null && System.rand(50)) {
+				fur.brain["schedule"].runLogic();
+				return;
+			}
+			
 			// Randomly move nearby.
-			if (System.rand(75)) {
+			else if (System.rand(75)) {
 				var angle:Number = System.getRandNum(0, 360);
 				var dist:Number = System.getRandNum(2, 25);
 				var tgt:Point = new Point(System.forward(dist, angle, true), System.forward(dist, angle, false));
@@ -33,7 +39,12 @@ package src.cobaltricindustries.fct.props.actor.logic {
 				return;
 			}
 			
-			// Move to a random point.
+			else {
+				moveToRandomLocation();
+			}
+		}
+		
+		public function moveToRandomLocation():void {
 			fur.speed = ABST_Movable.NORMAL_SPEED;
 			fur.setPOI(System.getRandomValidLocation(fur));
 		}

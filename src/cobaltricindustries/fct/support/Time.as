@@ -10,14 +10,14 @@ package src.cobaltricindustries.fct.support {
 		/// Index into System.DAYS
 		public var day:int = 1;
 		/// The current hour, in 24-hour format. (0 == midnight)
-		public var hour:int = 8;
+		public var hour:int = 9;
 		public var minute:int = 0;
 		
 		/// The current count of the number of frames.
 		public var frameCounter:int = 0;
 		
 		/// Number of updates per frame (default 1).
-		public var gameSpeed:int = 1;
+		public var gameSpeed:int = 3;
 		/// If gameSpeed > 0, keeps track of what additional step we're on (useful to only call UI when = 0)
 		public static var stepCounter:int;
 		
@@ -48,6 +48,14 @@ package src.cobaltricindustries.fct.support {
 				}
 				cg.ui.setTime(getFormattedTime());
 			}
+		}
+		
+		/**
+		 * Returns the current time in mins from midnight format.
+		 * @return
+		 */
+		public function getCurrentTimestamp():int {
+			return System.toTimestamp(hour, minute);
 		}
 
 		/**
