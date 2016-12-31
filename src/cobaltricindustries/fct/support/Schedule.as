@@ -38,12 +38,15 @@ package src.cobaltricindustries.fct.support {
 		private var anchor:MovieClip;
 		private var sched:MovieClip;
 		private var inner:MovieClip;
-		/// How many subdivisions in an hour. (1 == 1:00, 2 == 0:30, 4 == 0:15)
-		private var timeScale:int = 1;
 		/// A 2D array of SWC_ScheduleCells. Indexed by column, then row.
 		private var scheduleCells:Array;
 		private var scrollbarVertical:Scrollbar;
 		
+		private const MIBS:Array = [60, 30, 15];
+		private var mibsInd:int = 0;
+		/// How many minutes per UI block.
+		private var minsInBlock:int = MIBS[mibsInd];
+
 		public function Schedule(cg_:ContainerGame, hotel:Hotel) {
 			super(cg_);
 			rooms = hotel.rooms;
@@ -72,12 +75,13 @@ package src.cobaltricindustries.fct.support {
 			// end dev code
 			
 			buildScheduleUi();
+			updateZoomButtons();
 			updateEvents();
 		}
 		
 		override public function step():void {
 			if (sched.visible) {
-				inner.mc_currentTime.y = anchor.y + (anchor.height * (cg.time.getCurrentTimestamp() / 60));
+				inner.mc_currentTime.y = anchor.y + (anchor.height * (cg.time.getCurrentTimestamp() / minsInBlock));
 			}
 		}
 		
@@ -132,8 +136,8 @@ package src.cobaltricindustries.fct.support {
 				}
 				// update the position
 				ce.uiBlock.x = anchor.x + (anchor.width * (roomToIndex[ce.room.name] + 1));
-				ce.uiBlock.y = anchor.y + (anchor.height * (ce.startHour + (ce.startMinute / 60)));
-				ce.uiBlock.mc_box.scaleY = ce.duration / 60;
+				ce.uiBlock.y = anchor.y + (anchor.height * (ce.getTimestamp(true) / minsInBlock));
+				ce.uiBlock.mc_box.scaleY = ce.duration / minsInBlock;
 			}
 		}
 
@@ -150,8 +154,8 @@ package src.cobaltricindustries.fct.support {
 			// build 1 column per room, plus 1 for the time legend
 			for (var c:int = 0; c <= roomsArr.length; c++) {
 				var column:Array = [];
-				// build 24 hours' worth of cells, plus 1 for the room legend
-				for (var r:int = 0; r <= timeScale * 24; r++) {
+				// build the maximum amount of cells for the highest zoom level, plus 1 for the room legend
+				for (var r:int = 0; r <= (60 / MIBS[MIBS.length - 1]) * 24; r++) {
 					var cell:MovieClip = new SWC_ScheduleCell();
 					// topmost row
 					if (r == 0) {
@@ -161,6 +165,10 @@ package src.cobaltricindustries.fct.support {
 						} else {
 							cell.tf_cell.visible = false;
 						}
+					// hide extra cells to be used if the time is zoomed in
+					} else if (r > (60 / minsInBlock) * 24) {
+						cell.visible = false;
+						cell.tf_cell.visible = false;
 					// not building the time column
 					} else if (c != 0) {
 						cell.tf_cell.visible = false;
@@ -169,7 +177,10 @@ package src.cobaltricindustries.fct.support {
 					}
 					cell.x = anchor.x + c * anchor.width;
 					cell.y = anchor.y + r * anchor.height;
-					inner.addChild(cell);
+					// only add the child if needed, to ensure scrollbar works properly
+					if (cell.visible) {
+						inner.addChild(cell);
+					}
 					column.push(cell);
 				}
 				scheduleCells.push(column);
@@ -183,6 +194,66 @@ package src.cobaltricindustries.fct.support {
 			sched.btn_close.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void {
 				cg.game.mc_ui.mc_schedule.visible = false;
 			});
+			var zoomIn:Function = zoom(true);
+			var zoomOut:Function = zoom(false);
+			sched.btn_zoomIn.addEventListener(MouseEvent.CLICK, zoomIn);
+			sched.btn_zoomOut.addEventListener(MouseEvent.CLICK, zoomOut);
+		}
+		
+		/**
+		 * Update the schedule based on zoom level.
+		 */
+		private function rebuildScheduleUi():void {
+			var cell:MovieClip;
+			for (var c:int = 0; c <= roomsArr.length; c++) {
+				for (var r:int = 0; r < scheduleCells[c].length; r++) {
+					cell = scheduleCells[c][r];
+					// update time cells
+					if (c == 0 && r >= 1 && r <= (60 / minsInBlock) * 24) {
+						var raw:Number = (r - 1) * (minsInBlock) / 60;
+						var h:int = int(raw);
+						var m:int = 60 * (raw - h);
+						cell.tf_cell.visible = true;
+						cell.tf_cell.text = Time.getFormattedTime(h, m);
+					}
+					// hide extra cells
+					if (r > (60 / minsInBlock) * 24) {
+						cell.visible = false;
+						if (inner.contains(cell)) {
+							inner.removeChild(cell);
+						}
+					} else {
+						cell.visible = true;
+						if (!inner.contains(cell)) {
+							inner.addChild(cell);
+						}
+					}
+				}
+			}
+			updateEvents();
+		}
+		
+		/**
+		 * Change the zoom of the schedule.
+		 * @param	zoomIn	true to zoom in, false to zoom out
+		 */
+		private function zoom(zoomIn:Boolean):Function {
+			return function(e:MouseEvent):void {
+				if (zoomIn && mibsInd + 1 == MIBS.length) {
+					return;
+				} else if (!zoomIn && mibsInd - 1 < 0) {
+					return;
+				}
+				mibsInd += zoomIn ? 1 : -1;
+				minsInBlock = MIBS[mibsInd];
+				updateZoomButtons();
+				rebuildScheduleUi();
+			}
+		}
+		
+		private function updateZoomButtons():void {
+			sched.btn_zoomIn.alpha = mibsInd == MIBS.length - 1 ? .25 : 1;
+			sched.btn_zoomOut.alpha = mibsInd == 0 ? .25 : 1;
 		}
 
 		public function debugSchedule():void {
