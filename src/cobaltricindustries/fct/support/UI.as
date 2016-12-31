@@ -1,10 +1,11 @@
 package src.cobaltricindustries.fct.support {
+	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import src.cobaltricindustries.fct.ContainerGame;
 	import src.cobaltricindustries.fct.System;
-	
+	import flash.events.MouseEvent;
 	/**
-	 * Handles anything to do with the game UI.
+	 * Handles anything to do with the main game UI.
 	 * @author Serule Blue
 	 */
 	public class UI extends ABST_Support {
@@ -15,6 +16,19 @@ package src.cobaltricindustries.fct.support {
 		public function UI(_cg:ContainerGame) {
 			super(_cg);
 			ui = cg.game.mc_ui;
+			
+			ui.mc_schedule.visible = false;
+			addShowHideListener(ui.btn_schedule, ui.mc_schedule);
+		}
+		
+		/**
+		 * Attach listeners to show/hide the given MovieClip when the given button is clicked
+		 * @param	mc
+		 */
+		private function addShowHideListener(btn:DisplayObject, mc:MovieClip):void {
+			btn.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void {
+				mc.visible = !mc.visible;
+			});
 		}
 		
 		/**

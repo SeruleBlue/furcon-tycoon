@@ -1,4 +1,5 @@
 package src.cobaltricindustries.fct.support.conevent {
+	import flash.display.MovieClip;
 	import src.cobaltricindustries.fct.System;
 	/**
 	 * A single event in the con.
@@ -15,6 +16,9 @@ package src.cobaltricindustries.fct.support.conevent {
 		public var startMinute:int = -1;
 		public var endHour:int = -1;
 		public var endMinute:int = -1;
+		
+		/// The EventCell associated with this event.
+		public var uiBlock:MovieClip;
 		
 		public function ConEvent(name_:String, duration_:int) {
 			name = name_;
@@ -37,6 +41,14 @@ package src.cobaltricindustries.fct.support.conevent {
 			var endTime:Array = System.fromTimestamp(System.toTimestamp(startHour, startMinute) + duration);
 			endHour = endTime[0];
 			endMinute = endTime[1];
+		}
+		
+		/**
+		 * Returns true if this event has a valid room, day, and time.
+		 * @return
+		 */
+		public function isScheduled():Boolean {
+			return room != null && day != null && startHour != -1 && startMinute != -1 && endHour != -1 && endMinute != -1;
 		}
 		
 		/**

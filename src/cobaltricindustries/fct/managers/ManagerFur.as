@@ -16,7 +16,7 @@ package src.cobaltricindustries.fct.managers {
 			var fur:Fur;
 			for (var i:int = 0; i < 15; i++) {
 				fur = new Fur(cg, new SWC_Fur());
-				cg.game.addChild(fur.mc_object);
+				cg.game.mc_containerFurs.addChild(fur.mc_object);
 				var pt:Point = System.getRandomValidLocationInRoom(cg.game.mc_innerContainer.rm_ls);
 				fur.mc_object.x = pt.x; fur.mc_object.y = pt.y;
 				addObject(fur);

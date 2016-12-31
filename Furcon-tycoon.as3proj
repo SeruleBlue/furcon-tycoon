@@ -61,6 +61,8 @@
     <element path="src\fla\swc\SWC_ContainerGame.swc" />
     <element path="src\fla\swc\SWC_Fur.swc" />
     <element path="src\fla\swc\SWC_Mask.swc" />
+    <element path="src\fla\swc\SWC_ScheduleCell.swc" />
+    <element path="src\fla\swc\SWC_EventCell.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>

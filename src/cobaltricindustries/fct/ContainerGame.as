@@ -71,6 +71,7 @@
 			metaManager.addManager(time, "time");
 			hotel = new Hotel(this, "The Harriot");
 			schedule = new Schedule(this, hotel);
+			metaManager.addManager(schedule, "schedule");
 			
 			// Initialize Managers.
 			metaManager.addManager(new ManagerFur(this), "fur");
@@ -78,7 +79,7 @@
 			//graphMaster.debugDrawNetwork();
 			
 			// Intitialize the UI.
-			ui.setTime(time.getFormattedTime());
+			ui.setTime(time.getCurrentFormattedTime());
 			ui.setDay(time.day);
 		}
 		

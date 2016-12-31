@@ -39,6 +39,8 @@
       <path-element>C:\Users\Alex\Documents\Flash\furcon-tycoon\src\fla\swc\SWC_ContainerGame.swc</path-element>
       <path-element>C:\Users\Alex\Documents\Flash\furcon-tycoon\src\fla\swc\SWC_Fur.swc</path-element>
       <path-element>C:\Users\Alex\Documents\Flash\furcon-tycoon\src\fla\swc\SWC_Mask.swc</path-element>
+      <path-element>C:\Users\Alex\Documents\Flash\furcon-tycoon\src\fla\swc\SWC_ScheduleCell.swc</path-element>
+      <path-element>C:\Users\Alex\Documents\Flash\furcon-tycoon\src\fla\swc\SWC_EventCell.swc</path-element>
     </library-path>
   </compiler>
   <file-specs>

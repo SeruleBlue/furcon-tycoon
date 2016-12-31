@@ -17,7 +17,7 @@ package src.cobaltricindustries.fct.support {
 		public var frameCounter:int = 0;
 		
 		/// Number of updates per frame (default 1).
-		public var gameSpeed:int = 3;
+		public var gameSpeed:int = 1;
 		/// If gameSpeed > 0, keeps track of what additional step we're on (useful to only call UI when = 0)
 		public static var stepCounter:int;
 		
@@ -46,7 +46,7 @@ package src.cobaltricindustries.fct.support {
 						cg.ui.setDay(day);
 					}
 				}
-				cg.ui.setTime(getFormattedTime());
+				cg.ui.setTime(getFormattedTime(hour, minute));
 			}
 		}
 		
@@ -57,22 +57,25 @@ package src.cobaltricindustries.fct.support {
 		public function getCurrentTimestamp():int {
 			return System.toTimestamp(hour, minute);
 		}
+		public function getCurrentFormattedTime():String {
+			return getFormattedTime(hour, minute);
+		}
 
 		/**
-		 * Returns the current time in hh:mmam/pm format.
+		 * Returns the given time in hh:mmam/pm format.
 		 * @return
 		 */
-		public function getFormattedTime():String {
-			var isAm:Boolean = hour < 12 || hour == 24;
+		public static function getFormattedTime(h:int, m:int):String {
+			var isAm:Boolean = h < 12 || h == 24;
 			var strHour:String;
-			if (hour == 0) {
+			if (h == 0) {
 				strHour = "12"; 
-			} else if (hour > 12) {
-				strHour = (hour - 12).toString();
+			} else if (h > 12) {
+				strHour = (h - 12).toString();
 			} else {
-				strHour = hour.toString();
+				strHour = h.toString();
 			}
-			var strMinute:String = System.pad(minute);
+			var strMinute:String = System.pad(m);
 			return strHour + ":" + strMinute + " " + (isAm ? "am" : "pm");
 		}
 		
