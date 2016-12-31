@@ -41,6 +41,11 @@
 		public var schedule:Schedule;
 		public var hotel:Hotel;
 
+		/// Position of mouse in previous frame.
+		private var prevX:Number = 0;
+		/// Position of mouse in previous frame.
+		private var prevY:Number = 0;
+
 		/**
 		 * A MovieClip containing all of a FCT level
 		 * @param	eng		A reference to the Engine
@@ -97,8 +102,26 @@
 				metaManager.step();
 				Time.stepCounter++;
 			}
+			updateMouseLocation();
 
 			return completed;
+		}
+		
+		/**
+		 * Remember the new location of the mouse.
+		 * Implemented here to ensure it fires after all other managers.
+		 */
+		private function updateMouseLocation():void {
+			prevX = mouseX;
+			prevY = mouseY;
+		}
+		
+		/**
+		 * Returns true if the mouse is in a different position than in the previous frame.
+		 * @return
+		 */
+		public function didMouseUpdate():Boolean {
+			return prevX != mouseX || prevY != mouseY;
 		}
 
 		/**

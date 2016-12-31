@@ -375,6 +375,26 @@ package src.cobaltricindustries.fct {
 				   System.hasLineOfSight(origin, tgt, new Point(0, -buffer)) && System.hasLineOfSight(origin, tgt, new Point(0, buffer));
 		}
 		
+		/**
+		 * Returns the MC in the list that is closest to the mouse.
+		 * @param	cg		Instance of ContainerGame
+		 * @param	mcArr	Array of MovieClips whose distances to check
+		 * @return			Nearest MC to the mouse
+		 */
+		public static function getNearestToMouse(cg:ContainerGame, mcArr:Array):MovieClip {
+			var nearestMC:MovieClip;
+			var nearestDist:Number = 99999;
+			for each (var mc:MovieClip in mcArr) {
+				var loc:Point = mc.parent.localToGlobal(new Point(mc.x, mc.y));
+				var dist:Number = getDistance(cg.mouseX, cg.mouseY, loc.x, loc.y);
+				if (dist < nearestDist) {
+					nearestDist = dist;
+					nearestMC = mc;
+				}
+			}
+			return mc;
+		}
+		
 		public static function calculateAverage(values:Array):Number {
 			if (!values || values.length == 0)
 				return 0;

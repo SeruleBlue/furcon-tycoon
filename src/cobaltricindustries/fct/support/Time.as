@@ -10,7 +10,7 @@ package src.cobaltricindustries.fct.support {
 		/// Index into System.DAYS
 		public var day:int = 1;
 		/// The current hour, in 24-hour format. (0 == midnight)
-		public var hour:int = 9;
+		public var hour:int = 8;
 		public var minute:int = 0;
 		
 		/// The current count of the number of frames.
