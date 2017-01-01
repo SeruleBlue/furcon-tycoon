@@ -85,10 +85,10 @@ package src.cobaltricindustries.fct.support {
 			events["Art Panel"] = new ConEvent("Art Panel", 30);
 			events["Dealer's Den"] = new ConEvent("Dealer's Den", 30);
 			
-			/*scheduleEvent(events["Opening Ceremony"], rooms["Ballroom"], "Tue", 10, 0);
-			scheduleEvent(events["Artist Alley"], rooms["Panel 3"], "Tue", 11, 30);
-			scheduleEvent(events["Dealer's Den"], rooms["Ballroom"], "Tue", 13, 0);
-			scheduleEvent(events["Art Panel"], rooms["Panel 3"], "Tue", 13, 0);*/
+			/*scheduleEvent(events["Opening Ceremony"], rooms["Ballroom"], "Tue", 8, 30);
+			scheduleEvent(events["Artist Alley"], rooms["Panel 3"], "Tue", 8, 45);
+			scheduleEvent(events["Dealer's Den"], rooms["Ballroom"], "Tue", 10, 0);
+			scheduleEvent(events["Art Panel"], rooms["Panel 3"], "Tue", 10, 0);*/
 			debugSchedule();
 			// end dev code
 			

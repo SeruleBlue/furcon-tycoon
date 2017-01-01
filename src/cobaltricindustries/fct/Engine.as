@@ -21,7 +21,6 @@ package src.cobaltricindustries.fct {
 		public var superContainer:SWC_Mask;
 		
 		public function Engine() {			
-			addEventListener(Event.ENTER_FRAME, step);					// primary game loop firer
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
 		
@@ -31,6 +30,7 @@ package src.cobaltricindustries.fct {
 		 */
 		private function onAddedToStage(e:Event):void {
 			removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+			addEventListener(Event.ENTER_FRAME, step);					// primary game loop firer
 			superContainer = new SWC_Mask();
 			superContainer.x += System.GAME_OFFSX;
 			superContainer.y += System.GAME_OFFSY;

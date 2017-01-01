@@ -1,5 +1,6 @@
 package src.cobaltricindustries.fct.props {
 	import src.cobaltricindustries.fct.ContainerGame;
+	import src.cobaltricindustries.fct.props.actor.stats.Buff;
 	import src.cobaltricindustries.fct.System;
 	import flash.display.MovieClip;
 	import flash.geom.Point;
@@ -21,6 +22,9 @@ package src.cobaltricindustries.fct.props {
 		
 		/// Dictionary of numeric stats for this object. string -> [current, min, max, update_amount, update_counter, update_frequency]
 		public var stats:Object = { };
+		
+		/// Dictionary of buff names to buffs for this object. Affects stats.
+		public var buffs:Object = { };
 		
 		/// Helper for use in ABST_Manager.getNearby
 		public var nearDistance:Number = 0;
@@ -105,23 +109,32 @@ package src.cobaltricindustries.fct.props {
 		}
 		
 		/**
-		 * Update all of this object's stats based on its update values.
+		 * Apply (add or renew) the given buff.
+		 * @param	buff
 		 */
-		protected function updateStats():void {
-			for (var key:String in stats) {
-				var stat:Array = stats[key];
-				// if update values exist
-				if (stat.length > 3) {
-					// if incrementing the counter hits the limit
-					if (++stat[4] >= stat[5]) {
-						// reset the counter and change the stat by the update value
-						stat[4] = 0;
-						changeStat(key, stat[3]);
-					}
-				}
+		public function applyBuff(buff:Buff):void {
+			if (buffs[buff.name] != null) {
+				buffs[buff.name].reapply();
+			} else {
+				buffs[buff.name] = buff;
 			}
 		}
 		
+		/**
+		 * Update all of this object's stats based on its buffs. Remove expired buffs.
+		 */
+		protected function updateStats():void {
+			for (var key:String in buffs) {
+				var buff:Buff = buffs[key];
+				if (buff.step()) {
+					buff.destroy();
+					buff = null;
+					buffs[key] = null;
+					delete buffs[key];
+				}
+			}
+		}
+
 		/**
 		 * Helper to get the distance from this object to another
 		 * @param	other		the other ABST_Obect

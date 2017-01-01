@@ -3,12 +3,14 @@ package src.cobaltricindustries.fct.props.actor {
 	import src.cobaltricindustries.fct.ContainerGame;
 	import src.cobaltricindustries.fct.props.ABST_Movable;
 	import src.cobaltricindustries.fct.props.actor.logic.*;
+	import src.cobaltricindustries.fct.props.actor.stats.Buff;
 	import src.cobaltricindustries.fct.support.conevent.ConEvent;
 	import src.cobaltricindustries.fct.support.Schedule;
 	import src.cobaltricindustries.fct.System;
 	import flash.display.MovieClip;
 	import flash.geom.Point;
 	import src.cobaltricindustries.fct.SM;
+	import src.cobaltricindustries.fct.props.actor.stats.Buffs;
 	
 	/**
 	 * Object representing an individual, con-going furry.
@@ -30,14 +32,16 @@ package src.cobaltricindustries.fct.props.actor {
 		public function Fur(_cg:ContainerGame, _mc_object:MovieClip = null) {
 			super(_cg, _mc_object, _cg.hitbox);
 			
-			stats["happiness"] = 	[50, 0, 100,	-1, 0, System.SECOND * 2];
-			stats["energy"] = 		[50, 0, 100,	-1, 0, System.SECOND * 30];
+			stats["happiness"] = 	[50, 0, 100];
+			stats["energy"] = 		[50, 0, 100];
 
-			stats["hunger"] = 		[0, 0, 100,		 1, 0, System.SECOND * 30];
-			stats["thirst"] = 		[0, 0, 100,		 1, 0, System.SECOND * 30];
-			stats["toilet"] = 		[0, 0, 100,		 1, 0, System.SECOND * 30];
+			stats["hunger"] = 		[0, 0, 100];
+			stats["thirst"] = 		[0, 0, 100];
+			stats["toilet"] = 		[0, 0, 100];
 
 			stats["money"] = 		[50, 0, 9999];
+			
+			applyBuff(Buffs.HAP_DRAIN.getCopy(this));
 			
 			brain["event"] = new LogicEvent(this);
 			brain["idle"] = new LogicIdle(this);
