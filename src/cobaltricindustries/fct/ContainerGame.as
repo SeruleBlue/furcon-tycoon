@@ -2,6 +2,7 @@
 	import src.cobaltricindustries.fct.managers.ManagerFur;
 	import src.cobaltricindustries.fct.managers.MetaManager;
 	import src.cobaltricindustries.fct.props.actor.Fur;
+	import src.cobaltricindustries.fct.support.Demographics;
 	import src.cobaltricindustries.fct.support.graph.GraphMaster;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -39,6 +40,7 @@
 		public var ui:UI;
 		public var time:Time;
 		public var schedule:Schedule;
+		public var demographics:Demographics;
 		public var hotel:Hotel;
 
 		/// Position of mouse in previous frame.
@@ -76,6 +78,7 @@
 			metaManager.addManager(time, "time");
 			hotel = new Hotel(this, "The Harriot");
 			schedule = new Schedule(this, hotel);
+			demographics = new Demographics(this);
 			metaManager.addManager(schedule, "schedule");
 			
 			// Initialize Managers.
@@ -86,6 +89,8 @@
 			// Intitialize the UI.
 			ui.setTime(time.getCurrentFormattedTime());
 			ui.setDay(time.day);
+			
+			demographics.displayDemographic("Age");
 		}
 		
 		/**

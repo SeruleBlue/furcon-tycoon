@@ -63,6 +63,7 @@
     <element path="src\fla\swc\SWC_Mask.swc" />
     <element path="src\fla\swc\SWC_ScheduleCell.swc" />
     <element path="src\fla\swc\SWC_EventCell.swc" />
+    <element path="src\fla\swc\SWC_ChartLabel.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>

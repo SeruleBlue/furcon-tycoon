@@ -17,7 +17,7 @@ package src.cobaltricindustries.fct.props.actor {
 	 * @author Serule Blue
 	 */
 	public class Fur extends ABST_Movable {
-		public var handle:String = "Anonymous Furry";
+		public var handle:String = "???";
 		public var age:int = 22;
 		
 		public var inventory:Array = [];
@@ -29,8 +29,13 @@ package src.cobaltricindustries.fct.props.actor {
 		/// Dictionary of string keys to Logics.
 		public var brain:Object = { };
 		
+		/// Dictionary of string keys (traits) to Number (values [0-100]).
+		public var traits:Object = { };
+		
 		public function Fur(_cg:ContainerGame, _mc_object:MovieClip = null) {
 			super(_cg, _mc_object, _cg.hitbox);
+			
+			FurDesigner.designFur(this);
 			
 			stats["happiness"] = 	[50, 0, 100];
 			stats["energy"] = 		[50, 0, 100];
@@ -92,10 +97,14 @@ package src.cobaltricindustries.fct.props.actor {
 		
 		override protected function onClick(e:MouseEvent):void {
 			var out:String = handle + " (" + age + ")\n";
-			out += "HAP: " + stats["happiness"][0] + "\n";
+			out += "HAP: " + stats["happiness"][0] + "\n\n";
+			
 			out += "NOI: " + (nodeOfInterest ? nodeOfInterest.mc_object.name : "---") + "\n";
 			out += "EOI: " + (eventOfInterest ? eventOfInterest.name : "---") + "\n";
-			out += "state: " + SM.enumToString(state) + "\n";
+			out += "state: " + SM.enumToString(state) + "\n\n";
+			
+			out += "-- Interests --\n";
+			out += "Art: " + traits["Art"];
 			cg.ui.setDebug(out);
 		}
 	}

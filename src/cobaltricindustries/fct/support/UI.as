@@ -17,8 +17,8 @@ package src.cobaltricindustries.fct.support {
 			super(_cg);
 			ui = cg.game.mc_ui;
 			
-			ui.mc_schedule.visible = false;
 			addShowHideListener(ui.btn_schedule, ui.mc_schedule);
+			addShowHideListener(ui.btn_demographics, ui.mc_demographics);
 		}
 		
 		/**
@@ -26,6 +26,7 @@ package src.cobaltricindustries.fct.support {
 		 * @param	mc
 		 */
 		private function addShowHideListener(btn:DisplayObject, mc:MovieClip):void {
+			mc.visible = false;
 			btn.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void {
 				mc.visible = !mc.visible;
 			});

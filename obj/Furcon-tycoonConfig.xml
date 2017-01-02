@@ -16,7 +16,7 @@
     </define>
     <define append="true">
       <name>CONFIG::timeStamp</name>
-      <value>'1/1/2017'</value>
+      <value>'1/2/2017'</value>
     </define>
     <define append="true">
       <name>CONFIG::air</name>
@@ -41,6 +41,7 @@
       <path-element>C:\Users\Alex\Documents\Flash\furcon-tycoon\src\fla\swc\SWC_Mask.swc</path-element>
       <path-element>C:\Users\Alex\Documents\Flash\furcon-tycoon\src\fla\swc\SWC_ScheduleCell.swc</path-element>
       <path-element>C:\Users\Alex\Documents\Flash\furcon-tycoon\src\fla\swc\SWC_EventCell.swc</path-element>
+      <path-element>C:\Users\Alex\Documents\Flash\furcon-tycoon\src\fla\swc\SWC_ChartLabel.swc</path-element>
     </library-path>
   </compiler>
   <file-specs>

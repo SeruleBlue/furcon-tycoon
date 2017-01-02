@@ -40,6 +40,9 @@ package src.cobaltricindustries.fct.props.actor.logic {
 			if (candidateEvents.length == 0) {
 				return;
 			}
+			
+			
+			
 			fur.eventOfInterest = System.getRandFrom(candidateEvents);
 			
 			// Make your way to the event.
