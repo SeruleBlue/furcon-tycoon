@@ -19,7 +19,8 @@ package src.cobaltricindustries.fct.props.actor {
 	public class Fur extends ABST_Movable {
 		public var handle:String = "???";
 		public var age:int = 22;
-		
+		public var gender:String;		// Biological gender, yo
+
 		public var inventory:Array = [];
 		
 		/// The Schedule this Fur knows about (not necessarily the 'real' one).
@@ -96,15 +97,18 @@ package src.cobaltricindustries.fct.props.actor {
 		}
 		
 		override protected function onClick(e:MouseEvent):void {
-			var out:String = handle + " (" + age + ")\n";
-			out += "HAP: " + stats["happiness"][0] + "\n\n";
+			var out:String = handle + " (age " + age + ")\n";
+			out += "Gender: " + gender + "\n\n";
+			out += "HAP: " + stats["happiness"][0] + "\n";
 			
 			out += "NOI: " + (nodeOfInterest ? nodeOfInterest.mc_object.name : "---") + "\n";
 			out += "EOI: " + (eventOfInterest ? eventOfInterest.name : "---") + "\n";
 			out += "state: " + SM.enumToString(state) + "\n\n";
 			
 			out += "-- Interests --\n";
-			out += "Art: " + traits["Art"];
+			out += "Art: " + Math.round(100 * traits["Art"]) + "\n";
+			out += "Writing: " + Math.round(100 * traits["Writing"]) + "\n";
+			out += "Fursuiting: " + Math.round(100 * traits["Fursuiting"]);
 			cg.ui.setDebug(out);
 		}
 	}

@@ -100,6 +100,28 @@ package src.cobaltricindustries.fct {
 		}
 		
 		/**
+		 * Gets a random item from the weighted list.
+		 * @param	choicesAndWeights	Array of 2-element Arrays of [value, weight]
+		 * @return
+		 */
+		public static function getRandomWeighted(choicesAndWeights:Array):* {
+			var total:Number = 0;
+			var i:int
+			for (i = 0; i < choicesAndWeights.length; i++) {
+				total += choicesAndWeights[i][1];
+			}
+			var r:Number = getRandNum(0, total);
+			var c:Number = 0;
+			for (i = 0; i < choicesAndWeights.length; i++) {
+				c += choicesAndWeights[i][1];
+				if (r <= c) {
+					return choicesAndWeights[i][0];
+				}
+			}
+			return choicesAndWeights[0][0];	// shouldn't happen
+		}
+		
+		/**
 		 * Returns a random color from the 4 main colors (RGYB)
 		 * @param	excludes	An Array of colors to exclude, else null
 		 * @return				A random color from the 4 main colors, excluding colors in excludes

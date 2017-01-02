@@ -10,7 +10,8 @@ package src.cobaltricindustries.fct.props.actor {
 		
 		/// returns [0-1]; hits (0, 0), (.25, .4), (.5, .5), (.75, .6), (1, 1)
 		public static const FN_CUBIC:Function = function(x:Number):Number {
-			return 3 * Math.pow(x, 3) - 4.8 * Math.pow(x, 2) + 2.6 * x;
+			// y = 3.2x^3 - 4.8x^2 + 2.6x from 0 to 1
+			return 3.2 * Math.pow(x, 3) - 4.8 * Math.pow(x, 2) + 2.6 * x;
 		}
 		
 		/// returns [0-1]; about 49% of values are from (.33, .88) to (.67, .88)
@@ -24,6 +25,11 @@ package src.cobaltricindustries.fct.props.actor {
 			return int(95 * Math.pow(x, 3) - 103 * Math.pow(x, 2) + 44 * x + 13);
 		}
 		
+		/// returns "Male" 75.7%, "Female" 18.2%, or "Complicated" 6.1%
+		public static const FN_GENDER:Function = function():String {
+			return System.getRandomWeighted([["Male", 75.7], ["Female", 18.2], ["Complicated", 6.1]]);
+		}
+		
 		public function FurDesigner() {
 			// Do not instiantiate.
 		}
@@ -35,9 +41,12 @@ package src.cobaltricindustries.fct.props.actor {
 		public static function designFur(fur:Fur):void {
 			fur.handle = "Furry " + furNum++;			// TODO read from a list
 			fur.age = FN_AGE(r());
+			fur.gender = FN_GENDER();
 			
-			// Interest in any sort of art
+			// general interests
 			fur.traits["Art"] = FN_CUBIC(r());
+			fur.traits["Writing"] = FN_CUBIC(r());
+			fur.traits["Fursuiting"] = FN_CUBIC(r());
 		}
 		
 		/**
@@ -49,6 +58,15 @@ package src.cobaltricindustries.fct.props.actor {
 		}
 		
 		/**
+		 * FN_CUBIC
+			0, 0
+			.25, .4
+			.5, .5
+			.75, .6
+			.99, .99
+			1, 1
+		 * 
+		 * 
 		 * FN_AGE
 			0 12
 			.015 15
@@ -58,9 +76,6 @@ package src.cobaltricindustries.fct.props.actor {
 			.75 30
 			.9 35
 			1 50
-		 * 
-		 * 
-		 * 
 		 * 
 		 */
 	}

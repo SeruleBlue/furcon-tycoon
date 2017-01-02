@@ -3,6 +3,7 @@ package src.cobaltricindustries.fct.managers {
 	import src.cobaltricindustries.fct.ContainerGame;
 	import src.cobaltricindustries.fct.props.actor.Fur;
 	import src.cobaltricindustries.fct.System;
+	import src.cobaltricindustries.fct.support.Demographics;
 	/**
 	 * Updates all Furs and provides aggregated stats.
 	 * @author Serule Blue
@@ -49,13 +50,53 @@ package src.cobaltricindustries.fct.managers {
 			cg.ui.setStats(stats);
 		}
 		
-		// TODO generalize
+		/**
+		 * Gets demographic information on the Furs currently in this Manager.
+		 * @param	stat	name of demographic to look for
+		 * @return			Array of [stats, xLabels]. Stats can be a 1 or 2D array. xLabels can be empty.
+		 */
 		public function getDemographics(stat:String):Array {
-			var ages:Array = [];
-			for each (var fur:Fur in objArray) {
-				ages.push(fur.age);
+			var stats:Array = [];
+			var xLabels:Array = [];
+			switch (stat) {
+				case "Gender":
+					stats[0] = [0];	xLabels[0] = ["Male"];
+					stats[1] = [0];	xLabels[1] = ["Female"];
+					stats[2] = [0];	xLabels[2] = ["Complicated"];
+					break;
+				case "Interests":
+					stats[0] = [];	xLabels[0] = ["Art"];
+					stats[1] = [];	xLabels[1] = ["Writing"];
+					stats[2] = [];	xLabels[2] = ["Fursuiting"];
+					break;
 			}
-			return ages;
+			var i:int;
+			for each (var fur:Fur in objArray) {
+				switch (stat) {
+					case "Age":
+						stats.push(fur.age);
+						break;
+					case "Gender":
+						for (i = 0; i < xLabels.length; i++) {
+							if (fur.gender == xLabels[i]) {
+								stats[i]++;
+								break;
+							}
+						}
+						break;
+					case "Interests":
+						for (i = 0; i < xLabels.length; i++) {
+							stats[i].push(fur.traits[xLabels[i]]);
+						}
+						break;
+				}
+			}
+			if (stat == "Interests") {
+				for (i = 0; i < xLabels.length; i++) {
+					stats[i] = Demographics.bucketData(stats[i], [0, .15, .35, .65, .85, 1]);
+				}
+			}
+			return [stats, xLabels];
 		}
 		
 		/**
