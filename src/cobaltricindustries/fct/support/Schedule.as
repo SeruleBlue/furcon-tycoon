@@ -89,7 +89,7 @@ package src.cobaltricindustries.fct.support {
 			scheduleEvent(events["Artist Alley"], rooms["Panel 3"], "Tue", 8, 45);
 			scheduleEvent(events["Dealer's Den"], rooms["Ballroom"], "Tue", 10, 0);
 			scheduleEvent(events["Art Panel"], rooms["Panel 3"], "Tue", 10, 0);*/
-			debugSchedule();
+			//debugSchedule();
 			// end dev code
 			
 			buildScheduleUi();

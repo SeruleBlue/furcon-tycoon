@@ -8,6 +8,7 @@ package src.cobaltricindustries.fct.support {
 	
 	/**
 	 * Demographics window. Visualizes demographics about the con attendees.
+	 * See FurDesigner for Demographic generation.
 	 * @author Serule Blue
 	 */
 	public class Demographics extends ABST_Support {
@@ -25,7 +26,9 @@ package src.cobaltricindustries.fct.support {
 		/// Map of title to [xaxis, yaxis] labels
 		public const titleToAxis:Object = {
 			"Age": ["Age", "Furs"],
-			"Gender": ["Biological Gender", "Furs"]
+			"Gender": ["Biological Gender", "Furs"],
+			// these shouldn't really be used other than for testing
+			"Money": ["Cash on Hand", "Furs"]
 		}
 		
 		/// Where to start the graph
@@ -79,6 +82,12 @@ package src.cobaltricindustries.fct.support {
 					break;
 				case "Interests":
 					drawStackedBarGraph(demo[0], demo[1]);
+					break;
+				// these shouldn't really be used other than for testing
+				case "Money":
+					//bucketGraph(demo[0], 5);
+					manualBucketGraph(demo[0],
+									  [0, 1, 10, 20, 50, 100, 250]);
 					break;
 			}
 		}
@@ -171,7 +180,7 @@ package src.cobaltricindustries.fct.support {
 			}
 			for each (var d:Number in data) {
 				var found:Boolean = false;
-				for (var j:int = 1; j < buckets.length; j++) {
+				for (var j:int = 1; j < dataCount.length; j++) {
 					// just iterate; buckets will never be larger than ~10 anyway
 					if (d < buckets[j]) {
 						dataCount[j - 1]++;
@@ -180,7 +189,7 @@ package src.cobaltricindustries.fct.support {
 					}
 				}
 				if (!found) {
-					dataCount[buckets.length - 1]++;
+					dataCount[dataCount.length - 1]++;
 				}
 			}
 			return dataCount;
@@ -197,14 +206,16 @@ package src.cobaltricindustries.fct.support {
 			const SPACING:Number = BAR_WIDTH * (1 + BUFFER_PROPORTION);
 			var xLoc:Number = ANCHOR.x + SPACING - BAR_WIDTH;
 			var i:int;
-			var colInd:int = 0;
+			var colInd:int;
 			// graph it
 			for (i = 0; i < dataArr.length; i++) {
+				colInd = 0;
 				// draw the bars
 				var innerData:Array = dataToProportion(dataArr[i]);
 				var yLoc:Number = ANCHOR.y;
 				for (var j:int = 0; j < innerData.length; j++) {
 					var h:Number = MAX_SIZES.y * innerData[j];
+					if (isNaN(h)) h = 0;
 					graph.graphics.beginFill(STACKED_COLORS[colInd], 1);
 					graph.graphics.drawRect(xLoc, yLoc - h, BAR_WIDTH, h);
 					graph.graphics.endFill();
@@ -258,6 +269,7 @@ package src.cobaltricindustries.fct.support {
 			for (i = 0; i < dataArr.length; i++) {
 				// draw the bar
 				var h:Number = MAX_SIZES.y * (dataArr[i] / Y_MAX);
+				if (isNaN(h)) h = 0;
 				graph.graphics.drawRect(xLoc, ANCHOR.y - h, BAR_WIDTH, h);
 				// generate the x label
 				var xLbl:MovieClip = new SWC_ChartLabel();

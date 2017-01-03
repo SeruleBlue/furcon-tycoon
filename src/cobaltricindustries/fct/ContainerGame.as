@@ -90,7 +90,9 @@
 			ui.setTime(time.getCurrentFormattedTime());
 			ui.setDay(time.day);
 			
-			demographics.displayDemographic("Age");
+			//demographics.displayDemographic("Age");			
+			// (!) -------------------- Debug only -------------------- (!)
+			demographics.displayDemographic("Money");
 		}
 		
 		/**

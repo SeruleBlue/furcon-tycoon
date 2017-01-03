@@ -35,8 +35,7 @@ package src.cobaltricindustries.fct.props.actor {
 		
 		public function Fur(_cg:ContainerGame, _mc_object:MovieClip = null) {
 			super(_cg, _mc_object, _cg.hitbox);
-			
-			FurDesigner.designFur(this);
+			mc_object.cacheAsBitmap = true;
 			
 			stats["happiness"] = 	[50, 0, 100];
 			stats["energy"] = 		[50, 0, 100];
@@ -46,6 +45,8 @@ package src.cobaltricindustries.fct.props.actor {
 			stats["toilet"] = 		[0, 0, 100];
 
 			stats["money"] = 		[50, 0, 9999];
+			
+			FurDesigner.designFur(this);
 			
 			applyBuff(Buffs.HAP_DRAIN.getCopy(this));
 			
@@ -97,8 +98,8 @@ package src.cobaltricindustries.fct.props.actor {
 		}
 		
 		override protected function onClick(e:MouseEvent):void {
-			var out:String = handle + " (age " + age + ")\n";
-			out += "Gender: " + gender + "\n\n";
+			var out:String = handle + " (age " + age + ", " + gender + ")\n";
+			out += "Money: $" + stats["money"][0] + "\n\n";
 			out += "HAP: " + stats["happiness"][0] + "\n";
 			
 			out += "NOI: " + (nodeOfInterest ? nodeOfInterest.mc_object.name : "---") + "\n";

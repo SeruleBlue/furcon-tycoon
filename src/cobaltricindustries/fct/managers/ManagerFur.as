@@ -67,7 +67,8 @@ package src.cobaltricindustries.fct.managers {
 				case "Interests":
 					stats[0] = [];	xLabels[0] = ["Art"];
 					stats[1] = [];	xLabels[1] = ["Writing"];
-					stats[2] = [];	xLabels[2] = ["Fursuiting"];
+					stats[2] = [];	xLabels[2] = ["Music"];
+					stats[3] = [];	xLabels[3] = ["Fursuiting"];
 					break;
 			}
 			var i:int;
@@ -75,6 +76,9 @@ package src.cobaltricindustries.fct.managers {
 				switch (stat) {
 					case "Age":
 						stats.push(fur.age);
+						break;
+					case "Money":
+						stats.push(fur.stats["money"][0]);
 						break;
 					case "Gender":
 						for (i = 0; i < xLabels.length; i++) {
@@ -93,7 +97,9 @@ package src.cobaltricindustries.fct.managers {
 			}
 			if (stat == "Interests") {
 				for (i = 0; i < xLabels.length; i++) {
-					stats[i] = Demographics.bucketData(stats[i], [0, .15, .35, .65, .85, 1]);
+					if (i == 0) trace("Art coming");
+					stats[i] = Demographics.bucketData(stats[i], [0, .2, .4, .6, .8, 1]);
+					if (i == 0) trace("Art bucketed:", stats[0]);
 				}
 			}
 			return [stats, xLabels];
