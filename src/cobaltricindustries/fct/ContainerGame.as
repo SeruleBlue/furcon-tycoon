@@ -20,6 +20,7 @@
 	import src.cobaltricindustries.fct.support.Schedule;
 	import src.cobaltricindustries.fct.support.Time;
 	import src.cobaltricindustries.fct.support.UI;
+	import flash.display.StageQuality;
 	
 	/**
 	 * Primary game container and controller.
@@ -64,6 +65,7 @@
 		protected function init(e:Event):void {
 			game.removeEventListener(Event.ADDED_TO_STAGE, init);
 			hitbox = game.mc_innerContainer.mc_collisionBox;
+			game.stage.quality = StageQuality.LOW;		// laptop dev to save battery
 			
 			metaManager = new MetaManager(this);
 			
@@ -83,6 +85,7 @@
 			
 			// Initialize Managers.
 			metaManager.addManager(new ManagerFur(this), "fur");
+			schedule.createEvents();
 			
 			//graphMaster.debugDrawNetwork();
 			

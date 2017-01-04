@@ -2,6 +2,7 @@ package src.cobaltricindustries.fct.managers {
 	import flash.geom.Point;
 	import src.cobaltricindustries.fct.ContainerGame;
 	import src.cobaltricindustries.fct.props.actor.Fur;
+	import src.cobaltricindustries.fct.support.conevent.ConEvent;
 	import src.cobaltricindustries.fct.System;
 	import src.cobaltricindustries.fct.support.Demographics;
 	/**
@@ -10,27 +11,35 @@ package src.cobaltricindustries.fct.managers {
 	 */
 	public class ManagerFur extends ABST_Manager {
 		
+		public static const TEST_NUM_FURS:int = 25;
+		
 		public function ManagerFur(_cg:ContainerGame) {
-			super(_cg);		
-			
-			// Temporary dev code!
-			var fur:Fur;
-			for (var i:int = 0; i < 100; i++) {
-				fur = new Fur(cg, new SWC_Fur());
-				cg.game.mc_containerFurs.addChild(fur.mc_object);
-				var pt:Point = System.getRandomValidLocationInRoom(cg.game.mc_innerContainer.rm_ls);
-				fur.mc_object.x = pt.x; fur.mc_object.y = pt.y;
-				addObject(fur);
-				fur.schedule = cg.schedule;
-				//fur.enableDebugging();
+			super(_cg);
+			// TODO: better setup
+			for (var i:int = 0; i < TEST_NUM_FURS; i++) {
+				createFur();
 			}
-			
 			//debugDemographics();
 		}
 		
 		override public function step():void {
 			updateStats();
 			super.step();
+		}
+		
+		/**
+		 * Create a random Fur, add it to ManagerFur, and return the reference.
+		 * @return	the Fur that was created
+		 */
+		public function createFur():Fur {
+			var fur:Fur = new Fur(cg, new SWC_Fur());
+			cg.game.mc_containerFurs.addChild(fur.mc_object);
+			var pt:Point = System.getRandomValidLocationInRoom(cg.game.mc_innerContainer.rm_ls);
+			fur.mc_object.x = pt.x; fur.mc_object.y = pt.y;
+			addObject(fur);
+			fur.schedule = cg.schedule;
+			//fur.enableDebugging();
+			return fur;
 		}
 		
 		/**
@@ -97,9 +106,7 @@ package src.cobaltricindustries.fct.managers {
 			}
 			if (stat == "Interests") {
 				for (i = 0; i < xLabels.length; i++) {
-					if (i == 0) trace("Art coming");
 					stats[i] = Demographics.bucketData(stats[i], [0, .2, .4, .6, .8, 1]);
-					if (i == 0) trace("Art bucketed:", stats[0]);
 				}
 			}
 			return [stats, xLabels];

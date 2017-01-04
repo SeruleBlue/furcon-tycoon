@@ -15,7 +15,7 @@ package src.cobaltricindustries.fct.props.actor.logic {
 		/**
 		 * Run whatever logic is associated with this Logic.
 		 */
-		public function runLogic(... args):void {
+		public function runLogic(... args):* {
 			// override this function
 		}
 	}

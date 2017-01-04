@@ -26,6 +26,11 @@ package src.cobaltricindustries.fct.props.actor {
 		/// The Schedule this Fur knows about (not necessarily the 'real' one).
 		public var schedule:Schedule;
 		public var eventOfInterest:ConEvent;
+		/// The current event that this Fur is running, if any
+		public var runningEvent:ConEvent;
+		
+		/// A list of ConEvents this Fur owns, possibly empty.
+		public var ownedEvents:Array = [];
 		
 		/// Dictionary of string keys to Logics.
 		public var brain:Object = { };
@@ -59,6 +64,11 @@ package src.cobaltricindustries.fct.props.actor {
 		override public function step():Boolean {
 			updateStats();
 			
+			if (brain["special"] != null && brain["special"].runLogic() == true) {
+				trace('Breaking with new state', SM.enumToString(state));
+				return super.step();
+			}
+			
 			switch (state) {
 				case SM.STATE_MOVE_FREE:
 				case SM.STATE_MOVE_NETWORK:
@@ -66,6 +76,7 @@ package src.cobaltricindustries.fct.props.actor {
 					brain["move"].runLogic();
 					break;
 				case SM.STATE_IN_EVENT:
+				case SM.STATE_RUNNING_EVENT:
 					brain["event"].runLogic();
 					break;
 				case SM.STATE_IDLE:
@@ -102,13 +113,14 @@ package src.cobaltricindustries.fct.props.actor {
 			out += "Money: $" + stats["money"][0] + "\n\n";
 			out += "HAP: " + stats["happiness"][0] + "\n";
 			
-			out += "NOI: " + (nodeOfInterest ? nodeOfInterest.mc_object.name : "---") + "\n";
+			out += "NOI: " + (nodeOfInterest ? nodeOfInterest.mc_object.name : "---") + "\t";
 			out += "EOI: " + (eventOfInterest ? eventOfInterest.name : "---") + "\n";
 			out += "state: " + SM.enumToString(state) + "\n\n";
 			
 			out += "-- Interests --\n";
 			out += "Art: " + Math.round(100 * traits["Art"]) + "\n";
 			out += "Writing: " + Math.round(100 * traits["Writing"]) + "\n";
+			out += "Music: " + Math.round(100 * traits["Music"]) + "\n";
 			out += "Fursuiting: " + Math.round(100 * traits["Fursuiting"]);
 			cg.ui.setDebug(out);
 		}

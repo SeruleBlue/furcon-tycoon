@@ -20,7 +20,7 @@ package src.cobaltricindustries.fct.props.actor.logic {
 			super(fur_);
 		}
 		
-		override public function runLogic(...args):void {
+		override public function runLogic(...args):* {
 			switch (fur.state) {
 				case SM.STATE_MOVE_NETWORK:
 					if (fur.pointOfInterest != null) {

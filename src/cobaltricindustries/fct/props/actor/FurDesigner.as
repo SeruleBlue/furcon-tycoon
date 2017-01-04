@@ -106,6 +106,7 @@ package src.cobaltricindustries.fct.props.actor {
 			fur.traits["Fursuiting"] = FN_INT_FURSUIT(r());
 			fur.traits["Music"] = FN_INT_MUSIC(r());
 			
+			// TODO implement later, more of a placeholder for now
 			// Skills - for a specific skill, either null or 0.00 (no skill) to 1.00 (prodigy)
 			var skills:Object = { };
 			skills["Art"] = FN_SK_ART(r());
@@ -119,52 +120,5 @@ package src.cobaltricindustries.fct.props.actor {
 		private static function r():Number {
 			return System.getRandNum(0, 1);
 		}
-		
-		/**
-		 * FN_CUBIC
-			0, 0
-			.25, .4
-			.5, .5
-			.75, .6
-			.99, .99
-			1, 1
-		 * 
-		 * 
-		 * FN_AGE
-			0 12
-			.015 15
-			.3 19
-			.4 20
-			.5 21
-			.75 30
-			.9 35
-			1 50
-		 * 
-		 * FN_SK_ART
-			 0, 0
-			.2, 25
-			.3, 45
-			.7, 50
-			.9, 90
-			1, 100
-		 * 
-		 * FN_INT_ART
-			0, 0
-			.006, .0
-			.097, .33
-			.431, .67
-			1, 1
-		 * 
-		 * FN_MONEY
-			.06 0
-			.185 10
-			.375 20
-			.585 30
-			.725 40
-			.815 50
-			.915 75
-			.965 100
-			1 150
-		 */
 	}
 }

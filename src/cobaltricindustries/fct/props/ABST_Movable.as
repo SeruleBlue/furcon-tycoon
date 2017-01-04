@@ -120,12 +120,18 @@ package src.cobaltricindustries.fct.props {
 			updatePosition(System.forward(spd, tgtAngle, true), System.forward(spd, tgtAngle, false));
 		}
 		
+		/**
+		 * Create debug drawing support objects.
+		 */
 		public function enableDebugging():void {
 			debuggingEnabled = true;
 			debugMc = new MovieClip();
 			cg.game.addChild(debugMc);			
 		}
 		
+		/**
+		 * Draw debugging information. Requires enableDebugging to be called once prior.
+		 */
 		private function handleDebug():void {
 			if (Time.isKeyframe()) {
 				debugMc.graphics.clear();
@@ -135,7 +141,7 @@ package src.cobaltricindustries.fct.props {
 					debugMc.graphics.lineTo(nodeOfInterest.mc_object.x, nodeOfInterest.mc_object.y);
 				}
 				if (pointOfInterest != null) {
-					debugMc.graphics.lineStyle(2, speed == NORMAL_SPEED ? 0x00FFFF : 0xFF00FF, 0.25);
+					debugMc.graphics.lineStyle(2, 0xFF0000, 0.25);
 					debugMc.graphics.moveTo(mc_object.x, mc_object.y);
 					debugMc.graphics.lineTo(pointOfInterest.x, pointOfInterest.y);
 				}

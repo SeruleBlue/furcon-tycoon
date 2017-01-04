@@ -13,13 +13,13 @@ package src.cobaltricindustries.fct.props.actor.logic {
 			super(fur_);
 		}
 		
-		override public function runLogic(...args):void {
+		override public function runLogic(...args):* {
 			// Do absolutely nothing.
 			if (System.rand(99)) {
 				return;
 			}
 			
-			// Attempt to schedule and attend an event.
+			// Attempt to attend an upcoming event.
 			else if (fur.eventOfInterest == null && System.rand(50)) {
 				fur.brain["schedule"].runLogic();
 				return;

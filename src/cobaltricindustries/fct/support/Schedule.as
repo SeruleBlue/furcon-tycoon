@@ -2,6 +2,7 @@ package src.cobaltricindustries.fct.support {
 	import flash.events.MouseEvent;
 	import flash.geom.ColorTransform;
 	import flash.geom.Point;
+	import src.cobaltricindustries.fct.props.actor.Fur;
 	import src.freeactionscript.Scrollbar;
 	import flash.display.MovieClip;
 	import src.cobaltricindustries.fct.ContainerGame;
@@ -72,29 +73,49 @@ package src.cobaltricindustries.fct.support {
 			for each (var cr:ConRoom in rooms) {
 				roomsArr.push(cr);
 			}
-			roomsArr = roomsArr.sort().reverse();
+			roomsArr = roomsArr.sort();
 			roomToIndex = { };
 			for (var i:int = 0; i < roomsArr.length; i++) {
 				roomToIndex[roomsArr[i].name] = i;
 			}
 			
-			// Temp dev code only!
-			events = { };
-			events["Opening Ceremony"] = new ConEvent("Opening Ceremony", 30);
-			events["Artist Alley"] = new ConEvent("Artist Alley", 60);
-			events["Art Panel"] = new ConEvent("Art Panel", 30);
-			events["Dealer's Den"] = new ConEvent("Dealer's Den", 30);
-			
-			/*scheduleEvent(events["Opening Ceremony"], rooms["Ballroom"], "Tue", 8, 30);
-			scheduleEvent(events["Artist Alley"], rooms["Panel 3"], "Tue", 8, 45);
-			scheduleEvent(events["Dealer's Den"], rooms["Ballroom"], "Tue", 10, 0);
-			scheduleEvent(events["Art Panel"], rooms["Panel 3"], "Tue", 10, 0);*/
-			//debugSchedule();
-			// end dev code
-			
 			buildScheduleUi();
 			updateZoomButtons();
+		}
+		
+		public function createEvents():void {
+			// Temp dev code only!
+			events = { };
+			createEvent("Opening Ceremony", 30, {"Main Event": 0.5});
+			createEvent("Artist Alley", 60, {"ongoing": true, "Main Event": 0.75, "Art": 0.8});
+			createEvent("Dealer's Den", 30, {"ongoing": true, "Main Event": 0.75, "Art": 0.6, "Writing": 0.25});
+			createEvent("Dance Comp", 45, {"Main Event": 1.0, "Fursuiting": 0.75 } );
+
+			createEvent("Art Panel", 30, {"Art": 0.6});
+			createEvent("Terrible Art Panel", 30, {"Art": 0.02});
+			createEvent("Music Panel", 30, {"Music": 0.6});
+			createEvent("Terrible Music Panel", 30, {"Music": 0.02});
+			createEvent("Writing Panel", 30, {"Writing": 0.5});
+
+			//scheduleEvent(events["Writing Panel"], rooms["Ballroom"], "Tue", 8, 30);
+			//debugSchedule();
+			// end dev code
+
 			updateEvents();
+		}
+		
+		/**
+		 * Create a new event and generate a new Fur to own it.
+		 * @param	name
+		 * @param	durationMins
+		 * @param	attributes
+		 * @param	owner			Specific Fur to own this event, or null to create a new one.
+		 */
+		public function createEvent(name:String, durationMins:int, attributes:Object = null, owner:Fur = null):void {
+			if (owner == null) {
+				owner = cg.metaManager.managerMap["fur"].createFur();
+			}
+			events[name] = new ConEvent(name, durationMins, owner, attributes);
 		}
 		
 		override public function step():void {

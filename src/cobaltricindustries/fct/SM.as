@@ -12,6 +12,7 @@ package src.cobaltricindustries.fct {
 		public static const STATE_MOVE_NETWORK:int = enum++;
 		public static const STATE_MOVE_FROM_NETWORK:int = enum++;
 		public static const STATE_IN_EVENT:int = enum++;
+		public static const STATE_RUNNING_EVENT:int = enum++;
 
 		public function SM() {
 			// Do not instiantiate.
@@ -34,6 +35,8 @@ package src.cobaltricindustries.fct {
 					return "Walking";
 				case STATE_IN_EVENT:
 					return "In an event";
+				case STATE_RUNNING_EVENT:
+					return "Running an event";
 			}
 			return "Unknown";
 		}
