@@ -65,7 +65,7 @@
 		protected function init(e:Event):void {
 			game.removeEventListener(Event.ADDED_TO_STAGE, init);
 			hitbox = game.mc_innerContainer.mc_collisionBox;
-			game.stage.quality = StageQuality.LOW;		// laptop dev to save battery
+			//game.stage.quality = StageQuality.LOW;		// laptop dev to save battery
 			
 			metaManager = new MetaManager(this);
 			
