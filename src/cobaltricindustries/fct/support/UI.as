@@ -12,11 +12,13 @@ package src.cobaltricindustries.fct.support {
 		
 		private var ui:MovieClip;
 		private const validStats:Array = ["money", "population", "rating"];
+		private var windowArr:Array = [];
 		
 		public function UI(_cg:ContainerGame) {
 			super(_cg);
 			ui = cg.game.mc_ui;
 			
+			addShowHideListener(ui.btn_goal, ui.mc_goal);
 			addShowHideListener(ui.btn_schedule, ui.mc_schedule);
 			addShowHideListener(ui.btn_demographics, ui.mc_demographics);
 		}
@@ -28,8 +30,14 @@ package src.cobaltricindustries.fct.support {
 		private function addShowHideListener(btn:DisplayObject, mc:MovieClip):void {
 			mc.visible = false;
 			btn.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void {
+				for each (var otherMC:MovieClip in windowArr) {
+					if (otherMC != mc) {
+						otherMC.visible = false;
+					}
+				}
 				mc.visible = !mc.visible;
 			});
+			windowArr.push(mc);
 		}
 		
 		/**

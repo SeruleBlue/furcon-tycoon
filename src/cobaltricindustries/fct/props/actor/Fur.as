@@ -3,6 +3,7 @@ package src.cobaltricindustries.fct.props.actor {
 	import src.cobaltricindustries.fct.ContainerGame;
 	import src.cobaltricindustries.fct.props.ABST_Movable;
 	import src.cobaltricindustries.fct.props.actor.logic.*;
+	import src.cobaltricindustries.fct.props.actor.stats.Bubble;
 	import src.cobaltricindustries.fct.props.actor.stats.Buff;
 	import src.cobaltricindustries.fct.support.conevent.ConEvent;
 	import src.cobaltricindustries.fct.support.Schedule;
@@ -22,6 +23,8 @@ package src.cobaltricindustries.fct.props.actor {
 		public var gender:String;		// Biological gender, yo
 
 		public var inventory:Array = [];
+		
+		private var bubble:Bubble;
 		
 		/// The Schedule this Fur knows about (not necessarily the 'real' one).
 		public var schedule:Schedule;
@@ -52,6 +55,7 @@ package src.cobaltricindustries.fct.props.actor {
 			stats["money"] = 		[50, 0, 9999];
 			
 			FurDesigner.designFur(this);
+			bubble = new Bubble(this);
 			
 			applyBuff(Buffs.HAP_DRAIN.getCopy(this));
 			
@@ -63,6 +67,7 @@ package src.cobaltricindustries.fct.props.actor {
 		
 		override public function step():Boolean {
 			updateStats();
+			bubble.step();
 			
 			if (brain["special"] != null && brain["special"].runLogic() == true) {
 				trace('Breaking with new state', SM.enumToString(state));
